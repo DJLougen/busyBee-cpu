@@ -18,17 +18,17 @@ DEFAULT_ARGS: dict[str, dict[str, Any]] = {
     "retrieve_memory": {"key": "selected_path"},
     "message_send": {"target": "<TARGET_FROM_STATE>", "message": "<MESSAGE_FROM_STATE>"},
     "cron_create": {
-        "name": "daily-status",
+        "name": "nightly-status",
         "schedule": "weekdays 09:00",
-        "message": "Send the status update.",
+        "message": "Send the nightly status update.",
     },
     "cron_update": {
         "name": "daily-status",
         "schedule": "weekdays 09:30",
         "message": "Send the status update.",
     },
-    "clarify": {"question": "Which target should be used?"},
-    "escalate": {"reason": "Action requires explicit approval or stronger context."},
+    "clarify": {"question": "Which generated output directory should be deleted?"},
+    "escalate": {"reason": "Destructive command requires explicit approval and sandbox confirmation."},
 }
 
 
