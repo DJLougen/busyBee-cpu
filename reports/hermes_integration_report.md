@@ -50,3 +50,4 @@ Summary: `5/5` direct Hermes adapter smoke cases completed with `ok=true`, `comp
 
 - `busyBee-cpu` server responses now strip classifier metadata such as `arg_template` before returning assistant content, preserving the strict tool-call JSON contract.
 - The full official HermesAgent-20 run still needs Docker Desktop running, because the benchmark verifier is containerized.
+- The local HermesAgent-20 repo has the adapter change committed on branch `codex/package-busybeaver-adapter`, but pushing to `stevibe/HermesAgent-20` was denied for the authenticated GitHub user. The applyable patch is tracked at `integrations/hermesagent20/busybee-cpu-adapter.patch`.

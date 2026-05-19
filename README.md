@@ -86,6 +86,13 @@ python scripts\test_hermes_direct.py --base-url http://127.0.0.1:8767/v1
 
 Latest direct adapter smoke: `5/5` passed across HA05, HA06, HA13, HA18, and HA20. See `reports/hermes_integration_report.md`.
 
+The HermesAgent-20 repository is owned by another GitHub account, so the Hermes-side adapter patch is vendored here for application to that repo:
+
+```powershell
+cd C:\Users\basbe\Desktop\AI_Research\HermesAgent-20
+git apply ..\busyBee-cpu\integrations\hermesagent20\busybee-cpu-adapter.patch
+```
+
 ## Design
 
 ```text
