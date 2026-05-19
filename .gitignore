@@ -7,5 +7,5 @@ build/
 *.egg-info/
 runs/
 reports/*
-!reports/*.md
+!reports/busybeaver_cpu_findings.md
 *.joblib
