@@ -63,6 +63,29 @@ Endpoint:
 
 The chat endpoint expects a message containing a JSON object with `goal`, `state`, and `available_tools`. It returns one strict JSON action in the assistant message.
 
+## Hermes Integration
+
+For HermesAgent-20, serve the trained Hermes policy on a Docker-reachable host port:
+
+```powershell
+python scripts\serve_policy.py --model runs\hermes_policy.joblib --host 0.0.0.0 --port 8767 --exposed-model busybee-cpu
+```
+
+Then run HermesAgent-20 with a policy-adapter label:
+
+```powershell
+cd C:\Users\basbe\Desktop\AI_Research\HermesAgent-20
+npm run dev:run -- --scenario HA-05 --provider busybee-cpu --model busybee-cpu --provider-model busybee-cpu --label busyBee-cpu --base-url http://host.docker.internal:8767/v1 --auth-mode none
+```
+
+If Docker Desktop is unavailable, the direct installed-runtime smoke can still exercise the Hermes adapter branch:
+
+```powershell
+python scripts\test_hermes_direct.py --base-url http://127.0.0.1:8767/v1
+```
+
+Latest direct adapter smoke: `5/5` passed across HA05, HA06, HA13, HA18, and HA20. See `reports/hermes_integration_report.md`.
+
 ## Design
 
 ```text

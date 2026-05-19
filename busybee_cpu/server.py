@@ -74,6 +74,7 @@ class Handler(BaseHTTPRequestHandler):
         request = json.loads(self.rfile.read(length).decode("utf-8") or "{}")
         row = parse_messages(request.get("messages") or [])
         action = self.server.policy.predict(row)
+        action.pop("arg_template", None)
         content = strict_json(action)
         self.send_json(
             200,

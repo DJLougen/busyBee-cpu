@@ -8,4 +8,5 @@ build/
 runs/
 reports/*
 !reports/busybeaver_cpu_findings.md
+!reports/hermes_integration_report.md
 *.joblib
