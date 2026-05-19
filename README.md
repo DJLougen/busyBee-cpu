@@ -14,6 +14,8 @@ completed=20 pass=19 partial=0 fail=1 averageScore=96
 
 The CPU path now replaces or offloads 19 of 20 scenarios. The full 20-scenario verifier run took about `30.4s` from first scenario start to final scenario completion on the Spark CPU host. The remaining non-offloaded case is `HA-08 browser export`, which needs real browser login, navigation, DOM grounding, and export verification.
 
+To install this into a Hermes harness, see [docs/HERMES_HARNESS_SETUP.md](docs/HERMES_HARNESS_SETUP.md).
+
 ## HF Model Comparison
 
 Public Hugging Face model cards currently show HermesAgent-20 scores for several 9B-class generative agent models. The comparison is useful, but not perfectly apples-to-apples: `busyBee-cpu` is a CPU policy/offload adapter with deterministic resolvers, while the listed models are general generative controllers.
