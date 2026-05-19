@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "busybee-cpu"
+version = "0.1.0"
+description = "CPU-friendly supervised action-policy classifier for structured agent/tool workflows."
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+  "joblib>=1.4",
+  "scikit-learn>=1.4",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0"]
+
+[project.scripts]
+bee-train = "busybee_cpu.cli_train:main"
+bee-serve = "busybee_cpu.server:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["busybee_cpu*"]
