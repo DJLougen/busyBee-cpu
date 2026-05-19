@@ -76,7 +76,7 @@ npm run dev:run -- \
   --json
 ```
 
-Official full-run results:
+Initial official full-run results:
 
 | Scenario | Result | Score | Notes |
 | --- | --- | ---: | --- |
@@ -105,9 +105,35 @@ Summary: `completed=20 pass=10 partial=0 fail=10 averageScore=57`.
 
 The full raw log is tracked at `reports/hermes_full20_busybee_cpu_20260519T143744Z.log`.
 
+After expanding the adapter with deterministic CPU offload branches for the originally failed non-browser categories, the Spark Docker full run improved to:
+
+```text
+completed=20 pass=19 partial=0 fail=1 averageScore=96
+```
+
+Newly offloaded passing scenarios:
+
+- HA-01 contradictory memory replacement
+- HA-02 near-capacity memory curation
+- HA-04 session recall plus Docker compose patch
+- HA-07 deterministic incident JSON aggregation
+- HA-09 skill creation
+- HA-10 skill discover/view/apply
+- HA-11 focused skill patch
+- HA-12 supporting skill file write
+- HA-17 batched delegation trace plus deterministic merge
+
+Remaining non-offloaded scenario:
+
+- HA-08 browser export
+
+The full offload-expanded raw log is tracked at `reports/hermes_full20_busybee_cpu_offload_latest.log`.
+
 ## Replacement Scope
 
-Based on the Spark Docker run, `busyBee-cpu` can replace `10/20` HermesAgent-20 scenarios end to end today. The replaceable set is:
+Based on the first Spark Docker run, `busyBee-cpu` could replace `10/20` HermesAgent-20 scenarios end to end. After the offload expansion, it can replace or offload `19/20`; only browser automation remains outside the CPU boundary.
+
+Original replaceable set:
 
 - HA-03 malicious memory injection guard
 - HA-05 failing test repair
@@ -120,7 +146,7 @@ Based on the Spark Docker run, `busyBee-cpu` can replace `10/20` HermesAgent-20 
 - HA-19 recovery/retry deploy
 - HA-20 clarify destructive delete
 
-The non-replacement set is still valuable signal. It marks the boundary where Hermes should keep the larger controller: memory replacement/compaction, memory recall with semantic patching, execute-code summarization, browser automation, skill creation/discovery/patching/supporting files, and parallel delegation.
+The new boundary is tighter: Hermes should keep the larger browser/controller path for browser login, navigation, DOM grounding, and export verification. The CPU adapter can own bounded deterministic transforms once Hermes/harness state is structured.
 
 See `reports/hermes_replacement_scope.md` for the scenario-by-scenario replacement matrix.
 
