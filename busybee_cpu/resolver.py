@@ -43,19 +43,38 @@ def path_parent(path: str) -> str:
     return "." if parent in {"", "."} else parent
 
 
+def is_test_path(path: str) -> bool:
+    low_path = path.lower().replace("\\", "/")
+    name = PurePosixPath(low_path).name
+    return (
+        "/test" in low_path
+        or "/tests" in low_path
+        or low_path.startswith("test")
+        or ".spec." in low_path
+        or ".test." in low_path
+        or ".tests/" in low_path
+        or name.startswith("test_")
+        or name.endswith("_test.py")
+        or name.endswith("tests.cs")
+        or name.endswith("test.cs")
+    )
+
+
 def score_path(path: str, *, goal: str, text: str, state: dict[str, Any], action: str) -> int:
     low_goal = goal.lower()
     low_text = text.lower()
     low_path = path.lower().replace("\\", "/")
+    test_path = is_test_path(path)
+    wants_test = "test file" in low_goal or "failing test file" in low_goal or "test itself" in low_goal
     score = 0
     if path in text:
         score += 5
-    if action == "read_file" and ("test file" in low_goal or "failing test" in low_goal):
-        score += 4 if ("/test" in low_path or low_path.startswith("test") or ".spec." in low_path or ".test." in low_path) else -1
-    if action == "read_file" and ("source" in low_goal or "implementation" in low_goal or "traceback" in low_goal):
-        score += 4 if not ("/test" in low_path or low_path.startswith("test") or ".spec." in low_path or ".test." in low_path) else -1
+    if action == "read_file" and wants_test:
+        score += 4 if test_path else -1
+    if action == "read_file" and not wants_test and ("source" in low_goal or "implementation" in low_goal or "traceback" in low_goal):
+        score += 4 if not test_path else -1
     if action in {"git_diff", "apply_patch"}:
-        score += 3 if not ("/test" in low_path or low_path.startswith("test") or ".spec." in low_path or ".test." in low_path) else 0
+        score += 3 if not test_path else 0
     if "traceback points to " + low_path in low_text:
         score += 10
     if "applied patch to " + low_path in low_text or "opened implementation file: " + low_path in low_text:
@@ -70,6 +89,7 @@ def best_path(state: dict[str, Any], *, goal: str, action: str) -> str | None:
     direct = first_match(
         [
             rf"Traceback points to ({PATH_RE})(?::\d+)?",
+            rf"Traceback mentions ({PATH_RE})(?::\d+)?",
             rf"Applied patch to ({PATH_RE})",
             rf"Opened implementation file: ({PATH_RE})",
             rf"Opened ({PATH_RE})",

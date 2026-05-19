@@ -75,3 +75,15 @@ state/action JSONL
 ```
 
 This repo is intended to be reusable across tool-policy tasks, not tied to one agent or benchmark.
+
+## BusyBeaver Findings
+
+The BusyBeaver CPU path was tested against the frozen BusyBeaver harness evals after adding deterministic grounding fixes for punctuation, schedule names, endpoint memory values, C# test paths, and `Traceback mentions ...` anchors.
+
+Current findings:
+
+- `frozen_path_grounding_v2`: correct tool `1.0000`, argument semantic `1.0000`, strict JSON `1.0000`, schema `1.0000`, unsafe command `0.0000`
+- `frozen_harness_v1`: correct tool `1.0000`, argument semantic `1.0000`, strict JSON `1.0000`, schema `1.0000`, unsafe command `0.0000`
+- Regression tests cover cron/message punctuation, cron-create defaults, endpoint memory copying, C# `.Tests` / `*Tests.cs` path selection, and traceback-anchor path grounding.
+
+The practical product conclusion is that narrow tool-policy routing is better handled by this CPU classifier plus deterministic resolver than by a tiny generative model. The learned model selects the action and argument template; the resolver copies exact values from state.
