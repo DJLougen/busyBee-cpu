@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="960" height="520" viewBox="0 0 960 520" role="img" aria-labelledby="title desc">
   <title id="title">busyBee-cpu HermesAgent-20 model comparison</title>
-  <desc id="desc">HermesAgent-20 score comparison: busyBee-cpu 96, Qwopus3.5-9B-Coder 85, Qwen3.5-9B 71, Qwen3.5-9B-Agent 68, Harmonic-Hermes-9B 47.</desc>
+  <desc id="desc">HermesAgent-20 score comparison: busyBee-cpu 96, Qwopus3.5-9B-Coder 85, Qwen3.5-9B 71, Qwen3.5-9B-Agent 68.</desc>
   <rect width="960" height="520" fill="#0f172a"/>
   <rect x="28" y="28" width="904" height="464" rx="18" fill="#111827" stroke="#334155" stroke-width="2"/>
 
@@ -47,14 +47,6 @@
       <rect x="230" y="3" width="381" height="24" rx="6" fill="#f59e0b"/>
       <text x="812" y="21" font-size="20" font-weight="800" fill="#fde68a">68</text>
       <text x="0" y="42" font-size="12" fill="#fcd34d">9B agent-tuned model</text>
-    </g>
-
-    <g transform="translate(0 280)">
-      <text x="0" y="20" font-size="15" font-weight="700" fill="#f8fafc">Harmonic-Hermes-9B</text>
-      <rect x="230" y="3" width="560" height="24" rx="6" fill="#1e293b"/>
-      <rect x="230" y="3" width="263" height="24" rx="6" fill="#fb7185"/>
-      <text x="812" y="21" font-size="20" font-weight="800" fill="#fecdd3">47</text>
-      <text x="0" y="42" font-size="12" fill="#fda4af">9B Hermes-tuned model</text>
     </g>
   </g>
 </svg>
