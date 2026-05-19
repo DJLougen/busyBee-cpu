@@ -4,8 +4,6 @@
 
 ![busyBee-cpu HermesAgent-20 scorecard](docs/assets/hermes-scorecard.svg)
 
-![busyBee-cpu CPU offload boundary](docs/assets/cpu-offload-map.svg)
-
 ## Current Result
 
 Official Spark Docker validation against HermesAgent-20:

@@ -1,49 +1,60 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="960" height="420" viewBox="0 0 960 420" role="img" aria-labelledby="title desc">
-  <title id="title">busyBee-cpu HermesAgent-20 CPU scorecard</title>
-  <desc id="desc">CPU-only Spark Docker scorecard: 19 of 20 scenarios passed, average score 96, full run about 30 seconds.</desc>
-  <rect width="960" height="420" fill="#0f172a"/>
-  <rect x="28" y="28" width="904" height="364" rx="18" fill="#111827" stroke="#334155" stroke-width="2"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="520" viewBox="0 0 960 520" role="img" aria-labelledby="title desc">
+  <title id="title">busyBee-cpu HermesAgent-20 model comparison</title>
+  <desc id="desc">HermesAgent-20 score comparison: busyBee-cpu 96, Qwopus3.5-9B-Coder 85, Qwen3.5-9B 71, Qwen3.5-9B-Agent 68, Harmonic-Hermes-9B 47.</desc>
+  <rect width="960" height="520" fill="#0f172a"/>
+  <rect x="28" y="28" width="904" height="464" rx="18" fill="#111827" stroke="#334155" stroke-width="2"/>
 
-  <text x="56" y="72" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="26" font-weight="800" fill="#f8fafc">busyBee-cpu on HermesAgent-20</text>
-  <text x="56" y="102" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="15" fill="#cbd5e1">CPU-only policy adapter, no neural generation in the hot path</text>
+  <text x="56" y="72" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="26" font-weight="800" fill="#f8fafc">HermesAgent-20 Score Comparison</text>
+  <text x="56" y="102" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="15" fill="#cbd5e1">busyBee-cpu is a CPU policy/offload adapter; others are 9B-class generative controllers from public HF cards.</text>
 
   <g transform="translate(56 132)">
-    <rect x="0" y="0" width="190" height="118" rx="14" fill="#064e3b"/>
-    <text x="95" y="42" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="34" font-weight="800" fill="#ecfdf5">19/20</text>
-    <text x="95" y="70" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="15" fill="#bbf7d0">scenarios passed</text>
-    <text x="95" y="94" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" fill="#86efac">Spark Docker full run</text>
+    <rect x="0" y="0" width="848" height="58" rx="12" fill="#0b1220" stroke="#1e293b"/>
+    <text x="22" y="24" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="700" fill="#93c5fd">busyBee-cpu runtime</text>
+    <text x="22" y="46" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" fill="#dbeafe">CPU only, no GPU required, no neural generation in the hot path, full 20-scenario run in about 30.4s.</text>
   </g>
 
-  <g transform="translate(270 132)">
-    <rect x="0" y="0" width="190" height="118" rx="14" fill="#0f766e"/>
-    <text x="95" y="42" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="34" font-weight="800" fill="#ecfeff">96</text>
-    <text x="95" y="70" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="15" fill="#ccfbf1">average score</text>
-    <text x="95" y="94" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" fill="#99f6e4">up from 57</text>
-  </g>
+  <g transform="translate(56 228)" font-family="Inter, Segoe UI, Arial, sans-serif">
+    <text x="0" y="-20" font-size="13" fill="#94a3b8">System</text>
+    <text x="784" y="-20" text-anchor="end" font-size="13" fill="#94a3b8">Score</text>
 
-  <g transform="translate(484 132)">
-    <rect x="0" y="0" width="190" height="118" rx="14" fill="#1d4ed8"/>
-    <text x="95" y="42" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="34" font-weight="800" fill="#eff6ff">CPU</text>
-    <text x="95" y="70" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="15" fill="#dbeafe">no GPU required</text>
-    <text x="95" y="94" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" fill="#bfdbfe">classifier + resolvers</text>
-  </g>
+    <g transform="translate(0 0)">
+      <text x="0" y="20" font-size="15" font-weight="700" fill="#f8fafc">busyBee-cpu</text>
+      <rect x="230" y="3" width="560" height="24" rx="6" fill="#1e293b"/>
+      <rect x="230" y="3" width="538" height="24" rx="6" fill="#22c55e"/>
+      <text x="812" y="21" font-size="20" font-weight="800" fill="#bbf7d0">96</text>
+      <text x="0" y="42" font-size="12" fill="#86efac">CPU adapter, deterministic resolvers</text>
+    </g>
 
-  <g transform="translate(698 132)">
-    <rect x="0" y="0" width="190" height="118" rx="14" fill="#7c2d12"/>
-    <text x="95" y="42" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="34" font-weight="800" fill="#fff7ed">30.4s</text>
-    <text x="95" y="70" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="15" fill="#fed7aa">20-scenario run</text>
-    <text x="95" y="94" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" fill="#fdba74">from verifier timestamps</text>
-  </g>
+    <g transform="translate(0 70)">
+      <text x="0" y="20" font-size="15" font-weight="700" fill="#f8fafc">Qwopus3.5-9B-Coder</text>
+      <rect x="230" y="3" width="560" height="24" rx="6" fill="#1e293b"/>
+      <rect x="230" y="3" width="476" height="24" rx="6" fill="#38bdf8"/>
+      <text x="812" y="21" font-size="20" font-weight="800" fill="#bae6fd">85</text>
+      <text x="0" y="42" font-size="12" fill="#93c5fd">9B generative controller</text>
+    </g>
 
-  <g transform="translate(56 286)">
-    <text x="0" y="0" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" fill="#94a3b8">Initial full adapter</text>
-    <rect x="0" y="14" width="620" height="24" rx="6" fill="#1e293b"/>
-    <rect x="0" y="14" width="310" height="24" rx="6" fill="#f59e0b"/>
-    <text x="642" y="34" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="18" font-weight="700" fill="#f8fafc">10/20, avg 57</text>
+    <g transform="translate(0 140)">
+      <text x="0" y="20" font-size="15" font-weight="700" fill="#f8fafc">Qwen3.5-9B</text>
+      <rect x="230" y="3" width="560" height="24" rx="6" fill="#1e293b"/>
+      <rect x="230" y="3" width="398" height="24" rx="6" fill="#a78bfa"/>
+      <text x="812" y="21" font-size="20" font-weight="800" fill="#ddd6fe">71</text>
+      <text x="0" y="42" font-size="12" fill="#c4b5fd">9B baseline</text>
+    </g>
 
-    <text x="0" y="70" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" fill="#94a3b8">After CPU offload expansion</text>
-    <rect x="0" y="84" width="620" height="24" rx="6" fill="#1e293b"/>
-    <rect x="0" y="84" width="589" height="24" rx="6" fill="#22c55e"/>
-    <text x="642" y="104" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="18" font-weight="700" fill="#f8fafc">19/20, avg 96</text>
+    <g transform="translate(0 210)">
+      <text x="0" y="20" font-size="15" font-weight="700" fill="#f8fafc">Qwen3.5-9B-Agent</text>
+      <rect x="230" y="3" width="560" height="24" rx="6" fill="#1e293b"/>
+      <rect x="230" y="3" width="381" height="24" rx="6" fill="#f59e0b"/>
+      <text x="812" y="21" font-size="20" font-weight="800" fill="#fde68a">68</text>
+      <text x="0" y="42" font-size="12" fill="#fcd34d">9B agent-tuned model</text>
+    </g>
+
+    <g transform="translate(0 280)">
+      <text x="0" y="20" font-size="15" font-weight="700" fill="#f8fafc">Harmonic-Hermes-9B</text>
+      <rect x="230" y="3" width="560" height="24" rx="6" fill="#1e293b"/>
+      <rect x="230" y="3" width="263" height="24" rx="6" fill="#fb7185"/>
+      <text x="812" y="21" font-size="20" font-weight="800" fill="#fecdd3">47</text>
+      <text x="0" y="42" font-size="12" fill="#fda4af">9B Hermes-tuned model</text>
+    </g>
   </g>
 </svg>
