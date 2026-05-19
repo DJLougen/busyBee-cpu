@@ -14,7 +14,21 @@ Official Spark Docker validation against HermesAgent-20:
 completed=20 pass=19 partial=0 fail=1 averageScore=96
 ```
 
-The CPU path now replaces or offloads 19 of 20 scenarios. The remaining non-offloaded case is `HA-08 browser export`, which needs real browser login, navigation, DOM grounding, and export verification.
+The CPU path now replaces or offloads 19 of 20 scenarios. The full 20-scenario verifier run took about `30.4s` from first scenario start to final scenario completion on the Spark CPU host. The remaining non-offloaded case is `HA-08 browser export`, which needs real browser login, navigation, DOM grounding, and export verification.
+
+## HF Model Comparison
+
+Public Hugging Face model cards currently show HermesAgent-20 scores for several 9B-class generative agent models. The comparison is useful, but not perfectly apples-to-apples: `busyBee-cpu` is a CPU policy/offload adapter with deterministic resolvers, while the listed models are general generative controllers.
+
+| System | HermesAgent-20 score | Runtime shape | Source |
+| --- | ---: | --- | --- |
+| `busyBee-cpu` | `96` | CPU classifier + deterministic resolvers, no neural generation hot path | this repo, Spark Docker log |
+| `Jackrong/Qwopus3.5-9B-Coder` | `85` | 9B generative model, LM Studio / MLX / GGUF on Apple Silicon | [HF card](https://huggingface.co/Jackrong/Qwopus3.5-9B-Coder) |
+| `Qwen/Qwen3.5-9B` | `71` | 9B generative model baseline | [HF card](https://huggingface.co/Jackrong/Qwopus3.5-9B-Coder) |
+| `armand0e/Qwen3.5-9B-Agent` | `68` | 9B agent-tuned generative model | [HF card](https://huggingface.co/Jackrong/Qwopus3.5-9B-Coder) |
+| `DJLougen/Harmonic-Hermes-9B` | `47` | 9B Hermes-tuned generative model | [HF card](https://huggingface.co/Jackrong/Qwopus3.5-9B-Coder) |
+
+The closest HF speed reference I found is the Qwopus MTP GGUF card, which reports token throughput improving from `4.94 tok/s` to `6.71 tok/s` for the generative model variant. `busyBee-cpu` is measured differently: it routes bounded actions and deterministic transforms on CPU, so the relevant number here is the full HermesAgent-20 wall-clock verifier pass, about `30.4s` for 20 scenarios. See [Qwopus3.5-9B-Coder-MTP-GGUF](https://huggingface.co/Jackrong/Qwopus3.5-9B-Coder-MTP-GGUF).
 
 Newly offloaded from the original failed set:
 

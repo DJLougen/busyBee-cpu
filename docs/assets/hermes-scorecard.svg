@@ -1,31 +1,49 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="960" height="360" viewBox="0 0 960 360" role="img" aria-labelledby="title desc">
-  <title id="title">busyBee-cpu HermesAgent-20 scorecard</title>
-  <desc id="desc">Spark Docker benchmark score progression from 10 of 20 passed to 19 of 20 passed.</desc>
-  <rect width="960" height="360" fill="#0f172a"/>
-  <rect x="28" y="28" width="904" height="304" rx="18" fill="#111827" stroke="#334155" stroke-width="2"/>
-  <text x="56" y="76" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="28" font-weight="700" fill="#f8fafc">busyBee-cpu HermesAgent-20</text>
-  <text x="56" y="108" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="16" fill="#cbd5e1">Spark Docker validation after selective CPU offload expansion</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="420" viewBox="0 0 960 420" role="img" aria-labelledby="title desc">
+  <title id="title">busyBee-cpu HermesAgent-20 CPU scorecard</title>
+  <desc id="desc">CPU-only Spark Docker scorecard: 19 of 20 scenarios passed, average score 96, full run about 30 seconds.</desc>
+  <rect width="960" height="420" fill="#0f172a"/>
+  <rect x="28" y="28" width="904" height="364" rx="18" fill="#111827" stroke="#334155" stroke-width="2"/>
 
-  <g transform="translate(56 146)">
-    <text x="0" y="0" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="15" fill="#94a3b8">Initial full adapter</text>
-    <rect x="0" y="18" width="520" height="34" rx="7" fill="#1e293b"/>
-    <rect x="0" y="18" width="260" height="34" rx="7" fill="#f59e0b"/>
-    <text x="540" y="42" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="24" font-weight="700" fill="#f8fafc">10/20</text>
-    <text x="625" y="42" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="16" fill="#cbd5e1">avg 57</text>
+  <text x="56" y="72" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="26" font-weight="800" fill="#f8fafc">busyBee-cpu on HermesAgent-20</text>
+  <text x="56" y="102" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="15" fill="#cbd5e1">CPU-only policy adapter, no neural generation in the hot path</text>
+
+  <g transform="translate(56 132)">
+    <rect x="0" y="0" width="190" height="118" rx="14" fill="#064e3b"/>
+    <text x="95" y="42" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="34" font-weight="800" fill="#ecfdf5">19/20</text>
+    <text x="95" y="70" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="15" fill="#bbf7d0">scenarios passed</text>
+    <text x="95" y="94" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" fill="#86efac">Spark Docker full run</text>
   </g>
 
-  <g transform="translate(56 230)">
-    <text x="0" y="0" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="15" fill="#94a3b8">After CPU offload expansion</text>
-    <rect x="0" y="18" width="520" height="34" rx="7" fill="#1e293b"/>
-    <rect x="0" y="18" width="494" height="34" rx="7" fill="#22c55e"/>
-    <text x="540" y="42" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="24" font-weight="700" fill="#f8fafc">19/20</text>
-    <text x="625" y="42" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="16" fill="#cbd5e1">avg 96</text>
+  <g transform="translate(270 132)">
+    <rect x="0" y="0" width="190" height="118" rx="14" fill="#0f766e"/>
+    <text x="95" y="42" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="34" font-weight="800" fill="#ecfeff">96</text>
+    <text x="95" y="70" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="15" fill="#ccfbf1">average score</text>
+    <text x="95" y="94" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" fill="#99f6e4">up from 57</text>
   </g>
 
-  <g transform="translate(730 132)">
-    <rect x="0" y="0" width="150" height="150" rx="18" fill="#0f766e"/>
-    <text x="75" y="62" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="46" font-weight="800" fill="#ecfeff">95%</text>
-    <text x="75" y="94" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="15" fill="#ccfbf1">scenario</text>
-    <text x="75" y="116" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="15" fill="#ccfbf1">coverage</text>
+  <g transform="translate(484 132)">
+    <rect x="0" y="0" width="190" height="118" rx="14" fill="#1d4ed8"/>
+    <text x="95" y="42" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="34" font-weight="800" fill="#eff6ff">CPU</text>
+    <text x="95" y="70" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="15" fill="#dbeafe">no GPU required</text>
+    <text x="95" y="94" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" fill="#bfdbfe">classifier + resolvers</text>
+  </g>
+
+  <g transform="translate(698 132)">
+    <rect x="0" y="0" width="190" height="118" rx="14" fill="#7c2d12"/>
+    <text x="95" y="42" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="34" font-weight="800" fill="#fff7ed">30.4s</text>
+    <text x="95" y="70" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="15" fill="#fed7aa">20-scenario run</text>
+    <text x="95" y="94" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" fill="#fdba74">from verifier timestamps</text>
+  </g>
+
+  <g transform="translate(56 286)">
+    <text x="0" y="0" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" fill="#94a3b8">Initial full adapter</text>
+    <rect x="0" y="14" width="620" height="24" rx="6" fill="#1e293b"/>
+    <rect x="0" y="14" width="310" height="24" rx="6" fill="#f59e0b"/>
+    <text x="642" y="34" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="18" font-weight="700" fill="#f8fafc">10/20, avg 57</text>
+
+    <text x="0" y="70" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" fill="#94a3b8">After CPU offload expansion</text>
+    <rect x="0" y="84" width="620" height="24" rx="6" fill="#1e293b"/>
+    <rect x="0" y="84" width="589" height="24" rx="6" fill="#22c55e"/>
+    <text x="642" y="104" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="18" font-weight="700" fill="#f8fafc">19/20, avg 96</text>
   </g>
 </svg>
