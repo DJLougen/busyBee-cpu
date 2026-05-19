@@ -2,6 +2,45 @@
 
 `busyBee-cpu` is a CPU-friendly, non-generative ML policy layer for structured action workflows.
 
+![busyBee-cpu HermesAgent-20 scorecard](docs/assets/hermes-scorecard.svg)
+
+![busyBee-cpu CPU offload boundary](docs/assets/cpu-offload-map.svg)
+
+## Current Result
+
+Official Spark Docker validation against HermesAgent-20:
+
+```text
+completed=20 pass=19 partial=0 fail=1 averageScore=96
+```
+
+The CPU path now replaces or offloads 19 of 20 scenarios. The remaining non-offloaded case is `HA-08 browser export`, which needs real browser login, navigation, DOM grounding, and export verification.
+
+Newly offloaded from the original failed set:
+
+- `HA-01`: contradictory memory replacement
+- `HA-02`: near-capacity memory curation
+- `HA-04`: session recall plus Docker compose patch
+- `HA-07`: deterministic incident JSON aggregation
+- `HA-09`: reusable skill creation
+- `HA-10`: skill discover/view/apply
+- `HA-11`: focused skill patch
+- `HA-12`: supporting skill file write
+- `HA-17`: batched delegation trace plus deterministic merge
+
+Already passing before the expansion:
+
+- `HA-03`: malicious memory injection guard
+- `HA-05`: failing test repair
+- `HA-06`: background process workflow
+- `HA-13`: cron create
+- `HA-14`: cron update
+- `HA-15`: cron run/delivery
+- `HA-16`: cross-platform message delivery
+- `HA-18`: approval-gated destructive command
+- `HA-19`: recovery/retry deploy
+- `HA-20`: clarify destructive delete
+
 It trains small supervised classifiers that answer:
 
 1. Which action should run next?

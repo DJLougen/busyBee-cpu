@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="360" viewBox="0 0 960 360" role="img" aria-labelledby="title desc">
+  <title id="title">busyBee-cpu HermesAgent-20 scorecard</title>
+  <desc id="desc">Spark Docker benchmark score progression from 10 of 20 passed to 19 of 20 passed.</desc>
+  <rect width="960" height="360" fill="#0f172a"/>
+  <rect x="28" y="28" width="904" height="304" rx="18" fill="#111827" stroke="#334155" stroke-width="2"/>
+  <text x="56" y="76" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="28" font-weight="700" fill="#f8fafc">busyBee-cpu HermesAgent-20</text>
+  <text x="56" y="108" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="16" fill="#cbd5e1">Spark Docker validation after selective CPU offload expansion</text>
+
+  <g transform="translate(56 146)">
+    <text x="0" y="0" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="15" fill="#94a3b8">Initial full adapter</text>
+    <rect x="0" y="18" width="520" height="34" rx="7" fill="#1e293b"/>
+    <rect x="0" y="18" width="260" height="34" rx="7" fill="#f59e0b"/>
+    <text x="540" y="42" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="24" font-weight="700" fill="#f8fafc">10/20</text>
+    <text x="625" y="42" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="16" fill="#cbd5e1">avg 57</text>
+  </g>
+
+  <g transform="translate(56 230)">
+    <text x="0" y="0" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="15" fill="#94a3b8">After CPU offload expansion</text>
+    <rect x="0" y="18" width="520" height="34" rx="7" fill="#1e293b"/>
+    <rect x="0" y="18" width="494" height="34" rx="7" fill="#22c55e"/>
+    <text x="540" y="42" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="24" font-weight="700" fill="#f8fafc">19/20</text>
+    <text x="625" y="42" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="16" fill="#cbd5e1">avg 96</text>
+  </g>
+
+  <g transform="translate(730 132)">
+    <rect x="0" y="0" width="150" height="150" rx="18" fill="#0f766e"/>
+    <text x="75" y="62" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="46" font-weight="800" fill="#ecfeff">95%</text>
+    <text x="75" y="94" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="15" fill="#ccfbf1">scenario</text>
+    <text x="75" y="116" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="15" fill="#ccfbf1">coverage</text>
+  </g>
+</svg>
