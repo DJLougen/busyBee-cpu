@@ -84,7 +84,14 @@ If Docker Desktop is unavailable, the direct installed-runtime smoke can still e
 python scripts\test_hermes_direct.py --base-url http://127.0.0.1:8767/v1
 ```
 
-Latest direct adapter smoke: `5/5` passed across HA05, HA06, HA13, HA18, and HA20. See `reports/hermes_integration_report.md`.
+Latest official Docker-backed Spark run:
+
+- Adapter-focused slice: `5/5` passed, `averageScore=100` across HA-05, HA-06, HA-13, HA-18, and HA-20.
+- Full HermesAgent-20: `completed=20 pass=10 partial=0 fail=10 averageScore=57`.
+
+This supports using `busyBee-cpu` as a targeted CPU offload layer for routing, cron/message delivery, recovery, simple debug repair, and safety/approval flows. It is not a full Hermes controller replacement; memory lifecycle, browser automation, skill authoring, code summarization, and parallel delegation still need the larger controller. See `reports/hermes_integration_report.md`.
+
+Replacement scope is broken down scenario-by-scenario in `reports/hermes_replacement_scope.md`. Current estimate: `10/20` HermesAgent-20 scenarios can be replaced end to end by the CPU policy path, with the remaining scenarios better treated as larger-controller work.
 
 The HermesAgent-20 repository is owned by another GitHub account, so the Hermes-side adapter patch is vendored here for application to that repo:
 

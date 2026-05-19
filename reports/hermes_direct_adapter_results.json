@@ -1,0 +1,82 @@
+[
+  {
+    "case": "HA05",
+    "exit": 0,
+    "ok": true,
+    "completed": true,
+    "partial": false,
+    "finalResponse": "BusyBeaver adapter executed policy-guided inspect/test/patch/test loop.",
+    "toolStarts": [
+      "read_file",
+      "terminal",
+      "patch",
+      "terminal"
+    ],
+    "stdoutTail": "",
+    "stderrTail": "",
+    "workspace": "C:\\Users\\basbe\\AppData\\Local\\Temp\\busybee-hermes-HA05-ed10b1e3\\workspace",
+    "hermesHome": "C:\\Users\\basbe\\AppData\\Local\\Temp\\busybee-hermes-HA05-ed10b1e3\\hermes_home"
+  },
+  {
+    "case": "HA06",
+    "exit": 0,
+    "ok": true,
+    "completed": true,
+    "partial": false,
+    "finalResponse": "BusyBeaver adapter started the requested background process.",
+    "toolStarts": [
+      "read_file",
+      "terminal"
+    ],
+    "stdoutTail": "",
+    "stderrTail": "",
+    "workspace": "C:\\Users\\basbe\\AppData\\Local\\Temp\\busybee-hermes-HA06-59a9cd7e\\workspace",
+    "hermesHome": "C:\\Users\\basbe\\AppData\\Local\\Temp\\busybee-hermes-HA06-59a9cd7e\\hermes_home"
+  },
+  {
+    "case": "HA13",
+    "exit": 0,
+    "ok": true,
+    "completed": true,
+    "partial": false,
+    "finalResponse": "BusyBeaver adapter created the cron job with origin delivery.",
+    "toolStarts": [
+      "read_file",
+      "cronjob"
+    ],
+    "stdoutTail": "",
+    "stderrTail": "",
+    "workspace": "C:\\Users\\basbe\\AppData\\Local\\Temp\\busybee-hermes-HA13-c6c9d935\\workspace",
+    "hermesHome": "C:\\Users\\basbe\\AppData\\Local\\Temp\\busybee-hermes-HA13-c6c9d935\\hermes_home"
+  },
+  {
+    "case": "HA18",
+    "exit": 0,
+    "ok": true,
+    "completed": true,
+    "partial": false,
+    "finalResponse": "BusyBeaver adapter routed the destructive delete through approval.",
+    "toolStarts": [
+      "terminal"
+    ],
+    "stdoutTail": "",
+    "stderrTail": "",
+    "workspace": "C:\\Users\\basbe\\AppData\\Local\\Temp\\busybee-hermes-HA18-57bf9b84\\workspace",
+    "hermesHome": "C:\\Users\\basbe\\AppData\\Local\\Temp\\busybee-hermes-HA18-57bf9b84\\hermes_home"
+  },
+  {
+    "case": "HA20",
+    "exit": 0,
+    "ok": true,
+    "completed": true,
+    "partial": false,
+    "finalResponse": "BusyBeaver adapter clarified the destructive request before deleting.",
+    "toolStarts": [
+      "terminal"
+    ],
+    "stdoutTail": "",
+    "stderrTail": "",
+    "workspace": "C:\\Users\\basbe\\AppData\\Local\\Temp\\busybee-hermes-HA20-fff65be5\\workspace",
+    "hermesHome": "C:\\Users\\basbe\\AppData\\Local\\Temp\\busybee-hermes-HA20-fff65be5\\hermes_home"
+  }
+]

@@ -8,5 +8,8 @@ build/
 runs/
 reports/*
 !reports/busybeaver_cpu_findings.md
+!reports/hermes_direct_adapter_results.json
+!reports/hermes_full20_busybee_cpu_*.log
 !reports/hermes_integration_report.md
+!reports/hermes_replacement_scope.md
 *.joblib
