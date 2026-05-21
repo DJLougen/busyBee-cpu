@@ -5,6 +5,29 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.0] - 2026-05-21
+
+### Added
+
+- **BFCL V3 Benchmark**: Downloaded and converted 2,775 examples from [Berkeley Function Calling Leaderboard](https://huggingface.co/datasets/gorilla-llm/Berkeley-Function-Calling-Leaderboard)
+  - `scripts/convert_bfcl.py`: Raw BFCL-to-JSONL converter (569 unique function names)
+  - `scripts/convert_bfcl_mapped.py`: Category-mapped converter (4 busyBee-cpu actions)
+  - `examples/train_bfcl.jsonl` (2,220 examples) and `examples/eval_bfcl.jsonl` (555 examples)
+- **Synthetic Benchmark Generator**: `scripts/generate_synthetic_benchmark.py`
+  - Template-based generation of 1,000 software engineering scenarios
+  - Balanced across 4 core actions (read_file, run_tests, apply_patch, escalate)
+  - Varied file paths, types, test frameworks, and error messages
+  - `examples/train_synthetic.jsonl` (800 examples) and `examples/eval_synthetic.jsonl` (200 examples)
+- **Combined Training**: 819 examples (19 original + 800 synthetic) → 90% eval accuracy
+- **Benchmark Comparison Report**: `reports/benchmark_comparison.md` with full analysis
+- **Stress Test Script**: `scripts/stress_test_hermes.py` for 20-scenario Hermes integration testing
+
+### Changed
+
+- **HermesAgent-20 Score**: 20/20 scenarios passing (100%), up from 19/20 (96%)
+- **Eval Accuracy**: 90% on original eval (up from 70% with 19 examples)
+- **Version**: Bumped to 0.4.0
+
 ## [0.3.0] - 2026-05-21
 
 ### Added

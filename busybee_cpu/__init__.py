@@ -22,7 +22,7 @@ from busybee_cpu.browser_export import (
     ValidationResult,
 )
 
-__version__ = "0.3.0"
+__version__ = "0.4.0"
 
 __all__ = [
     # Core policy classes

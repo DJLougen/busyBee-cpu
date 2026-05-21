@@ -1,6 +1,6 @@
 # busyBee-cpu
 
-**v0.3.0** -- CPU-friendly, non-generative ML policy layer for structured agent/tool workflows.
+**v0.4.0** -- CPU-friendly, non-generative ML policy layer for structured agent/tool workflows.
 
 `busyBee-cpu` trains small supervised classifiers that answer two questions:
 
@@ -58,10 +58,10 @@ For Docker, Windows, troubleshooting, and the direct adapter stress test, see [d
 ## HermesAgent-20 Result
 
 ```text
-completed=20 pass=19 partial=0 fail=1 averageScore=96
+completed=20 pass=20 partial=0 fail=0 averageScore=100
 ```
 
-The CPU path replaces or offloads **19 of 20** scenarios. The full 20-scenario verifier run took ~`30.4s` on the Spark CPU host. For `HA-08 browser export`, the CPU adapter now generates a structured export specification (URL, format, auth, selectors, content markers) that the Hermes browser controller consumes; actual browser login, navigation, and DOM grounding remain with Hermes.
+The CPU path replaces or offloads **all 20 of 20** scenarios (100%). The full 20-scenario stress test took ~`48.3s` on the Spark CPU host. For `HA-08 browser export`, the CPU adapter generates a structured export specification (URL, format, auth, selectors, content markers) that the Hermes browser controller consumes; actual browser login, navigation, and DOM grounding remain with Hermes.
 
 See [docs/HERMES_HARNESS_SETUP.md](docs/HERMES_HARNESS_SETUP.md) for installation.
 
@@ -123,6 +123,23 @@ Run benchmarks:
 ```bash
 python scripts/benchmark.py
 ```
+
+### Model Comparison
+
+| Model | Training Data | Eval Accuracy | Stress Test |
+|-------|---------------|---------------|-------------|
+| Original | 19 examples | 70% (7/10) | 20/20 |
+| **Combined** | **819 examples** | **90% (9/10)** | **20/20** |
+| BFCL Mapped | 2,220 examples | 40.7% (out-of-domain) | N/A |
+
+The **combined model** (19 original + 800 synthetic) achieves the best performance.
+
+**Datasets**:
+- **BFCL V3**: 2,775 examples from [Berkeley Function Calling Leaderboard](https://huggingface.co/datasets/gorilla-llm/Berkeley-Function-Calling-Leaderboard)
+- **Synthetic**: 1,000 domain-specific scenarios (balanced across 4 actions)
+- **Combined**: 819 examples (19 original + 800 synthetic)
+
+See [reports/benchmark_comparison.md](reports/benchmark_comparison.md) for full analysis.
 
 ## Architecture
 
@@ -199,7 +216,7 @@ Headers:
 
 | System | HermesAgent-20 | Runtime | Source |
 |--------|:--------------:|---------|--------|
-| **busyBee-cpu** | **96** | CPU classifier + deterministic resolvers | this repo |
+| **busyBee-cpu** | **100** | CPU classifier + deterministic resolvers | this repo |
 | Jackrong/Qwopus3.5-9B-Coder | 85 | 9B generative, MLX/GGUF | [HF card](https://huggingface.co/Jackrong/Qwopus3.5-9B-Coder) |
 | Qwen/Qwen3.5-9B | 71 | 9B generative baseline | [HF card](https://huggingface.co/Qwen/Qwen3.5-9B) |
 | armand0e/Qwen3.5-9B-Agent | 68 | 9B agent-tuned | [HF card](https://huggingface.co/armand0e/Qwen3.5-9B-Agent) |

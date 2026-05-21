@@ -16,6 +16,9 @@ reports/*
 !reports/hermes_integration_report.md
 !reports/hermes_replacement_scope.md
 !reports/stress_test_results.json
+!reports/benchmark_comparison.md
+!reports/combined_policy.md
+!reports/stress_test_combined.json
 *.joblib
 *.pkl
 .DS_Store
