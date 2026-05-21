@@ -19,6 +19,9 @@ reports/*
 !reports/benchmark_comparison.md
 !reports/combined_policy.md
 !reports/stress_test_combined.json
+!reports/swebench_benchmark_comparison.md
+!reports/swebench_policy.md
+!reports/stress_test_swebench.json
 *.joblib
 *.pkl
 .DS_Store

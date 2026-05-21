@@ -5,6 +5,25 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.5.0] - 2026-05-21
+
+### Added
+
+- **SWE-bench Integration**: Downloaded and converted 21,527 real GitHub issues from [SWE-bench](https://huggingface.co/datasets/SWE-bench/SWE-bench)
+  - `scripts/convert_swebench.py`: SWE-bench-to-JSONL converter with multi-row generation per issue
+  - `examples/train_swebench.jsonl` (12,180 rows) and `examples/eval_swebench.jsonl` (2,405 rows)
+  - `examples/train_swebench_combined.jsonl` (14,718 rows: 19 original + 14,699 SWE-bench)
+- **SWE-bench Model**: Trained on 14,718 examples with balanced action distribution
+  - 99.96% accuracy on SWE-bench eval (2,405 examples)
+  - 80% accuracy on original eval (8/10)
+  - 20/20 stress test pass rate
+- **SWE-bench Report**: `reports/swebench_benchmark_comparison.md` with full analysis
+
+### Changed
+
+- **Recommended Model**: SWE-bench model replaces combined model as primary recommendation
+- **Version**: Bumped to 0.5.0
+
 ## [0.4.0] - 2026-05-21
 
 ### Added

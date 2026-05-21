@@ -1,6 +1,6 @@
 # busyBee-cpu
 
-**v0.4.0** -- CPU-friendly, non-generative ML policy layer for structured agent/tool workflows.
+**v0.5.0** -- CPU-friendly, non-generative ML policy layer for structured agent/tool workflows.
 
 `busyBee-cpu` trains small supervised classifiers that answer two questions:
 
@@ -129,17 +129,19 @@ python scripts/benchmark.py
 | Model | Training Data | Eval Accuracy | Stress Test |
 |-------|---------------|---------------|-------------|
 | Original | 19 examples | 70% (7/10) | 20/20 |
-| **Combined** | **819 examples** | **90% (9/10)** | **20/20** |
+| Combined | 819 examples | 90% (9/10) | 20/20 |
 | BFCL Mapped | 2,220 examples | 40.7% (out-of-domain) | N/A |
+| **SWE-bench** | **14,718 examples** | **80% (8/10) / 99.96% (2,405)** | **20/20** |
 
-The **combined model** (19 original + 800 synthetic) achieves the best performance.
+The **SWE-bench model** (19 original + 14,699 from real GitHub issues) achieves near-perfect accuracy on 2,405 SWE-bench evaluation examples while maintaining 20/20 stress test pass rate.
 
 **Datasets**:
+- **[SWE-bench](https://huggingface.co/datasets/SWE-bench/SWE-bench)**: 21,527 real GitHub issues from 12 Python repos (train/dev/test splits)
 - **BFCL V3**: 2,775 examples from [Berkeley Function Calling Leaderboard](https://huggingface.co/datasets/gorilla-llm/Berkeley-Function-Calling-Leaderboard)
 - **Synthetic**: 1,000 domain-specific scenarios (balanced across 4 actions)
 - **Combined**: 819 examples (19 original + 800 synthetic)
 
-See [reports/benchmark_comparison.md](reports/benchmark_comparison.md) for full analysis.
+See [reports/swebench_benchmark_comparison.md](reports/swebench_benchmark_comparison.md) for full SWE-bench analysis and [reports/benchmark_comparison.md](reports/benchmark_comparison.md) for BFCL/synthetic analysis.
 
 ## Architecture
 
