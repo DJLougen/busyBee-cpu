@@ -4,17 +4,19 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "busybee-cpu"
-version = "0.1.0"
+version = "0.3.0"
 description = "CPU-friendly supervised action-policy classifier for structured agent/tool workflows."
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
   "joblib>=1.4",
   "scikit-learn>=1.4",
+  "numpy>=1.24",
 ]
 
 [project.optional-dependencies]
 dev = ["pytest>=8.0"]
+otel = ["opentelemetry-api>=1.20", "opentelemetry-sdk>=1.20"]
 
 [project.scripts]
 bee-train = "busybee_cpu.cli_train:main"

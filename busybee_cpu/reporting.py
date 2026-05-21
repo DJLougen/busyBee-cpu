@@ -1,4 +1,4 @@
-from __future__ import annotations
+"""Markdown report generation for policy evaluation results."""
 
 from pathlib import Path
 from typing import Any

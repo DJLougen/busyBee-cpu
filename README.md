@@ -1,70 +1,158 @@
 # busyBee-cpu
 
-`busyBee-cpu` is a CPU-friendly, non-generative ML policy layer for structured action workflows.
+**v0.2.0** -- CPU-friendly, non-generative ML policy layer for structured agent/tool workflows.
+
+`busyBee-cpu` trains small supervised classifiers that answer two questions:
+
+1. Which action should run next?
+2. Which argument template should be used?
+
+Deterministic resolvers then fill concrete paths, commands, messages, schedules, and memory values from structured state. The learned part stays on CPU and avoids using an LLM to generate JSON.
 
 ![busyBee-cpu HermesAgent-20 scorecard](docs/assets/hermes-scorecard.svg)
 
-## Current Result
+## Quick Start
 
-Official Spark Docker validation against HermesAgent-20:
+```bash
+git clone https://github.com/DJLougen/busyBee-cpu.git
+cd busyBee-cpu
+python -m venv .venv && . .venv/bin/activate
+pip install -e ".[dev]"
+python -m pytest
+```
+
+```bash
+# Train
+bee-train --train examples/train.jsonl --eval examples/eval.jsonl --model-out runs/policy.joblib
+
+# Serve
+bee-serve --model runs/policy.joblib --host 127.0.0.1 --port 8767
+
+# Benchmark
+python scripts/benchmark.py
+```
+
+## HermesAgent-20 Result
 
 ```text
 completed=20 pass=19 partial=0 fail=1 averageScore=96
 ```
 
-The CPU path now replaces or offloads 19 of 20 scenarios. The full 20-scenario verifier run took about `30.4s` from first scenario start to final scenario completion on the Spark CPU host. The remaining non-offloaded case is `HA-08 browser export`, which needs real browser login, navigation, DOM grounding, and export verification.
+The CPU path replaces or offloads **19 of 20** scenarios. The full 20-scenario verifier run took ~`30.4s` on the Spark CPU host. For `HA-08 browser export`, the CPU adapter now generates a structured export specification (URL, format, auth, selectors, content markers) that the Hermes browser controller consumes; actual browser login, navigation, and DOM grounding remain with Hermes.
 
-To install this into a Hermes harness, see [docs/HERMES_HARNESS_SETUP.md](docs/HERMES_HARNESS_SETUP.md).
+See [docs/HERMES_HARNESS_SETUP.md](docs/HERMES_HARNESS_SETUP.md) for installation.
 
-## HF Model Comparison
+## v0.3.0 Features
 
-Public Hugging Face model cards currently show HermesAgent-20 scores for several 9B-class generative agent models. The comparison is useful, but not perfectly apples-to-apples: `busyBee-cpu` is a CPU policy/offload adapter with deterministic resolvers, while the listed models are general generative controllers.
+| Feature | Module | Description |
+|---------|--------|-------------|
+| **Ensemble classifier** | `policy.py` | VotingClassifier (SGD + Naive Bayes + LogisticRegression) with calibrated probabilities |
+| **Action masking** | `policy.py` | Restricts predictions to available tools; zero-probability fallback to escalate |
+| **Confidence escalation** | `policy.py` | Auto-escalates when prediction confidence falls below threshold |
+| **Data augmentation** | `policy.py` | Path-swapping augmentation for file-based tools |
+| **Numeric features** | `policy.py` | Traceback detection, tool count, error presence, observation density |
+| **Resolver registry** | `resolver.py` | Decorator-based `@register_resolver` pattern with unresolved field tracking |
+| **Workflow state machine** | `workflow.py` | Enforces action sequencing (read before patch) and detects loops |
+| **Session tracking** | `server.py` | Per-session prediction history with context injection |
+| **Online learning** | `server.py` | `POST /v1/learn` endpoint for feedback corrections |
+| **Multi-model serving** | `server.py` | Serve multiple models with `X-Model` header routing |
+| **Security hardening** | `server.py` | 2 MiB body limit, CORS, input validation, structured logging |
+| **Cross-validation** | `cli_train.py` | `--cv N` stratified k-fold CV with aggregated metrics |
+| **OpenTelemetry tracing** | `tracing.py` | Optional span-based tracing with graceful no-op fallback |
+| **Browser export partial offload** | `browser_export.py` | Structured export spec extraction, artifact validation, multi-step workflow tracking |
 
-| System | HermesAgent-20 score | Runtime shape | Source |
-| --- | ---: | --- | --- |
-| `busyBee-cpu` | `96` | CPU classifier + deterministic resolvers, no neural generation hot path | this repo, Spark Docker log |
-| `Jackrong/Qwopus3.5-9B-Coder` | `85` | 9B generative model, LM Studio / MLX / GGUF on Apple Silicon | [HF card](https://huggingface.co/Jackrong/Qwopus3.5-9B-Coder) |
-| `Qwen/Qwen3.5-9B` | `71` | 9B generative model baseline | [HF card](https://huggingface.co/Jackrong/Qwopus3.5-9B-Coder) |
-| `armand0e/Qwen3.5-9B-Agent` | `68` | 9B agent-tuned generative model | [HF card](https://huggingface.co/Jackrong/Qwopus3.5-9B-Coder) |
-| `DJLougen/Harmonic-Hermes-9B` | `47` | 9B Hermes-tuned generative model | [HF card](https://huggingface.co/Jackrong/Qwopus3.5-9B-Coder) |
+## Benchmarks
 
-The closest HF speed reference I found is the Qwopus MTP GGUF card, which reports token throughput improving from `4.94 tok/s` to `6.71 tok/s` for the generative model variant. `busyBee-cpu` is measured differently: it routes bounded actions and deterministic transforms on CPU, so the relevant number here is the full HermesAgent-20 wall-clock verifier pass, about `30.4s` for 20 scenarios. See [Qwopus3.5-9B-Coder-MTP-GGUF](https://huggingface.co/Jackrong/Qwopus3.5-9B-Coder-MTP-GGUF).
+Measured on 12th Gen Intel i9-12900K, Windows 11, Python 3.12.
 
-Newly offloaded from the original failed set:
+### Synthetic Data (500 train / 100 eval)
 
-- `HA-01`: contradictory memory replacement
-- `HA-02`: near-capacity memory curation
-- `HA-04`: session recall plus Docker compose patch
-- `HA-07`: deterministic incident JSON aggregation
-- `HA-09`: reusable skill creation
-- `HA-10`: skill discover/view/apply
-- `HA-11`: focused skill patch
-- `HA-12`: supporting skill file write
-- `HA-17`: batched delegation trace plus deterministic merge
+| Metric | Value |
+|--------|-------|
+| Training time | 5.28s |
+| Peak memory | 25.90 MB |
+| Model size | 2,577 KB |
+| Avg prediction latency | 32.2 ms |
+| P95 prediction latency | 53.9 ms |
+| Throughput | 33 predictions/sec |
 
-Already passing before the expansion:
+### Example Data (16 train / 8 eval)
 
-- `HA-03`: malicious memory injection guard
-- `HA-05`: failing test repair
-- `HA-06`: background process workflow
-- `HA-13`: cron create
-- `HA-14`: cron update
-- `HA-15`: cron run/delivery
-- `HA-16`: cross-platform message delivery
-- `HA-18`: approval-gated destructive command
-- `HA-19`: recovery/retry deploy
-- `HA-20`: clarify destructive delete
+| Metric | Value |
+|--------|-------|
+| Training time | 1.44s |
+| Peak memory | 13.3 MB |
+| Model size | 2,273 KB |
+| Avg prediction latency | 16.7 ms |
+| Correct action accuracy | 1.0000 |
+| Argument semantic match | 0.7500 |
 
-It trains small supervised classifiers that answer:
+### Resolver
 
-1. Which action should run next?
-2. Which argument template should be used?
+| Metric | Value |
+|--------|-------|
+| Avg latency | 6.5 us |
+| P50 latency | 8.1 us |
+| P95 latency | 9.7 us |
 
-Deterministic resolvers then fill concrete paths, commands, messages, schedules, and memory values from structured state. This keeps the learned part on CPU and avoids using an LLM to generate JSON.
+Run benchmarks:
+
+```bash
+python scripts/benchmark.py
+```
+
+## Architecture
+
+```text
+state/action JSONL
+  -> TF-IDF (word bigrams + char 5-grams)
+  -> Numeric features (traceback, tool count, errors)
+  -> VotingClassifier (SGD + NB + LR) with calibration
+  -> Action masking (available tools constraint)
+  -> Argument template classifier
+  -> Deterministic resolver (registry-based)
+  -> Schema validation + safety checks
+  -> JSON action output
+```
+
+## API Reference
+
+### Python
+
+```python
+from busybee_cpu import CpuActionPolicy, evaluate_policy, load_jsonl
+
+# Train
+rows = load_jsonl("examples/train.jsonl")
+policy = CpuActionPolicy.train(rows, augment=True, confidence_threshold=0.3)
+policy.save("runs/policy.joblib")
+
+# Predict
+action = policy.predict(row, available_tools={"read_file", "escalate"})
+# -> {"tool": "read_file", "args": {"path": "src/main.py"}, "confidence": 0.95}
+
+# Evaluate
+metrics, traces = evaluate_policy(policy, eval_rows)
+```
+
+### HTTP Server
+
+```bash
+bee-serve --model runs/policy.joblib --host 0.0.0.0 --port 8767
+```
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/health` | GET | Server health + loaded models |
+| `/v1/models` | GET | OpenAI-compatible model listing |
+| `/v1/chat/completions` | POST | Chat completions (OpenAI-compatible) |
+| `/v1/learn` | POST | Online learning from corrections |
+
+Headers:
+- `X-Model: <name>` -- select model for multi-model serving
+- `X-Session-ID: <id>` -- enable session-aware predictions
 
 ## Row Format
-
-Training and evaluation use JSONL rows:
 
 ```json
 {
@@ -84,97 +172,91 @@ Training and evaluation use JSONL rows:
 }
 ```
 
-The old prompt-block format with `<|goal|>`, `<|state|>`, and `<|tools|>` is also accepted for migration, but the repo names and runtime APIs are generic.
+## HF Model Comparison
 
-## Train And Evaluate
-
-```powershell
-python scripts\train_policy.py `
-  --train examples\train.jsonl `
-  --eval examples\eval.jsonl `
-  --model-out runs\policy.joblib `
-  --report reports\policy.md
-```
-
-Or after installation:
-
-```powershell
-bee-train --train examples\train.jsonl --eval examples\eval.jsonl --model-out runs\policy.joblib
-```
-
-## Serve
-
-```powershell
-python scripts\serve_policy.py --model runs\policy.joblib --host 127.0.0.1 --port 8767
-```
-
-Endpoint:
-
-- `GET /health`
-- `GET /v1/models`
-- `POST /v1/chat/completions`
-
-The chat endpoint expects a message containing a JSON object with `goal`, `state`, and `available_tools`. It returns one strict JSON action in the assistant message.
+| System | HermesAgent-20 | Runtime | Source |
+|--------|:--------------:|---------|--------|
+| **busyBee-cpu** | **96** | CPU classifier + deterministic resolvers | this repo |
+| Jackrong/Qwopus3.5-9B-Coder | 85 | 9B generative, MLX/GGUF | [HF card](https://huggingface.co/Jackrong/Qwopus3.5-9B-Coder) |
+| Qwen/Qwen3.5-9B | 71 | 9B generative baseline | [HF card](https://huggingface.co/Qwen/Qwen3.5-9B) |
+| armand0e/Qwen3.5-9B-Agent | 68 | 9B agent-tuned | [HF card](https://huggingface.co/armand0e/Qwen3.5-9B-Agent) |
+| DJLougen/Harmonic-Hermes-9B | 47 | 9B Hermes-tuned | [HF card](https://huggingface.co/DJLougen/Harmonic-Hermes-9B) |
 
 ## Hermes Integration
 
-For HermesAgent-20, serve the trained Hermes policy on a Docker-reachable host port:
+```bash
+# Start server
+bee-serve --model runs/hermes_policy.joblib --host 0.0.0.0 --port 8767 --exposed-model busybee-cpu
 
-```powershell
-python scripts\serve_policy.py --model runs\hermes_policy.joblib --host 0.0.0.0 --port 8767 --exposed-model busybee-cpu
+# Run scenarios
+cd HermesAgent-20
+npm run dev:run -- --all --provider busybee-cpu --model busybee-cpu \
+  --provider-model busybee-cpu --label busyBee-cpu \
+  --base-url http://host.docker.internal:8767/v1 --auth-mode none
 ```
 
-Then run HermesAgent-20 with a policy-adapter label:
+The adapter patch is vendored for the HermesAgent-20 repo:
 
-```powershell
-cd C:\Users\basbe\Desktop\AI_Research\HermesAgent-20
-npm run dev:run -- --scenario HA-05 --provider busybee-cpu --model busybee-cpu --provider-model busybee-cpu --label busyBee-cpu --base-url http://host.docker.internal:8767/v1 --auth-mode none
+```bash
+cd HermesAgent-20
+git apply ../busyBee-cpu/integrations/hermesagent20/busybee-cpu-adapter.patch
 ```
 
-If Docker Desktop is unavailable, the direct installed-runtime smoke can still exercise the Hermes adapter branch:
+### Passing Scenarios (19/20)
 
-```powershell
-python scripts\test_hermes_direct.py --base-url http://127.0.0.1:8767/v1
-```
+| Category | Scenarios |
+|----------|-----------|
+| Memory | HA-01 replacement, HA-02 curation, HA-03 injection guard, HA-04 recall |
+| Code repair | HA-05 failing test, HA-19 recovery deploy |
+| Background | HA-06 process workflow |
+| Aggregation | HA-07 incident JSON, HA-17 batched delegation |
+| Skills | HA-09 creation, HA-10 discover/view/apply, HA-11 patch, HA-12 supporting file |
+| Scheduling | HA-13 cron create, HA-14 cron update, HA-15 cron delivery |
+| Messaging | HA-16 cross-platform delivery |
+| Safety | HA-18 approval-gated delete, HA-20 clarify destructive |
 
-Latest official Docker-backed Spark run:
+Partial offload: `HA-08` browser export generates structured specs; Hermes controller executes browser automation.
 
-- Initial adapter-focused slice: `5/5` passed, `averageScore=100` across HA-05, HA-06, HA-13, HA-18, and HA-20.
-- Initial full HermesAgent-20: `completed=20 pass=10 partial=0 fail=10 averageScore=57`.
-- After deterministic CPU offload expansion: `completed=20 pass=19 partial=0 fail=1 averageScore=96`.
-
-This supports using `busyBee-cpu` as a targeted CPU offload layer for routing, cron/message delivery, recovery, simple debug repair, safety/approval flows, bounded memory curation, deterministic code aggregation, skill file operations, and delegation-result merging. Browser automation remains with the larger controller. See `reports/hermes_integration_report.md`.
-
-Replacement scope is broken down scenario-by-scenario in `reports/hermes_replacement_scope.md`. Current estimate: `19/20` HermesAgent-20 scenarios can be replaced or offloaded by the CPU policy path, with browser automation better treated as larger-controller work.
-
-The HermesAgent-20 repository is owned by another GitHub account, so the Hermes-side adapter patch is vendored here for application to that repo:
-
-```powershell
-cd C:\Users\basbe\Desktop\AI_Research\HermesAgent-20
-git apply ..\busyBee-cpu\integrations\hermesagent20\busybee-cpu-adapter.patch
-```
-
-## Design
+## Project Structure
 
 ```text
-state/action JSONL
-  -> TF-IDF feature extractor
-  -> CPU action classifier
-  -> CPU argument-template classifier
-  -> deterministic resolver
-  -> schema/safety metrics
+busybee_cpu/
+  __init__.py          Package exports
+  policy.py            Ensemble classifier with calibration and masking
+  resolver.py          Registry-based argument resolver
+  rows.py              Row extraction and feature text generation
+  metrics.py           Evaluation metrics
+  templates.py         Default argument templates
+  server.py            OpenAI-compatible HTTP server
+  workflow.py          Workflow state machine
+  tracing.py           OpenTelemetry integration
+  cli_train.py         Training CLI with cross-validation
+  io.py                JSONL I/O
+  reporting.py         Markdown report generation
+  browser_export.py    Browser export partial offload (HA-08)
+scripts/
+  benchmark.py         Performance benchmarks
+  train_policy.py      Training entry point
+  serve_policy.py      Server entry point
+  test_hermes_direct.py  Hermes adapter smoke test
+examples/
+  train.jsonl          Training examples
+  eval.jsonl           Evaluation examples
+tests/
+  test_policy.py       41 tests covering all modules
+integrations/
+  hermesagent20/       Hermes adapter patch
+docs/
+  HERMES_HARNESS_SETUP.md  Installation guide
 ```
 
-This repo is intended to be reusable across tool-policy tasks, not tied to one agent or benchmark.
+## Dependencies
 
-## BusyBeaver Findings
+- `scikit-learn >= 1.4` -- classifiers and pipelines
+- `joblib >= 1.4` -- model serialization
+- `numpy >= 1.24` -- numeric operations
+- `opentelemetry-api >= 1.20` (optional) -- tracing
 
-The BusyBeaver CPU path was tested against the frozen BusyBeaver harness evals after adding deterministic grounding fixes for punctuation, schedule names, endpoint memory values, C# test paths, and `Traceback mentions ...` anchors.
+## License
 
-Current findings:
-
-- `frozen_path_grounding_v2`: correct tool `1.0000`, argument semantic `1.0000`, strict JSON `1.0000`, schema `1.0000`, unsafe command `0.0000`
-- `frozen_harness_v1`: correct tool `1.0000`, argument semantic `1.0000`, strict JSON `1.0000`, schema `1.0000`, unsafe command `0.0000`
-- Regression tests cover cron/message punctuation, cron-create defaults, endpoint memory copying, C# `.Tests` / `*Tests.cs` path selection, and traceback-anchor path grounding.
-
-The practical product conclusion is that narrow tool-policy routing is better handled by this CPU classifier plus deterministic resolver than by a tiny generative model. The learned model selects the action and argument template; the resolver copies exact values from state.
+MIT

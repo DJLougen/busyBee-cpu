@@ -1,4 +1,4 @@
-from __future__ import annotations
+"""JSONL file I/O utilities."""
 
 import json
 from pathlib import Path

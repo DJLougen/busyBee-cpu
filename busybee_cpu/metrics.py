@@ -1,4 +1,4 @@
-from __future__ import annotations
+"""Evaluation metrics for action prediction and argument resolution."""
 
 from typing import Any
 

@@ -1,13 +1,24 @@
+"""Deterministic argument resolution using state-based extraction.
+
+This module implements a registry-based resolver system that fills concrete
+argument values from structured state. Each resolver handles one or more tool
+types, extracting paths, commands, messages, schedules, memory values, and
+browser export specifications from observation text and policy features.
+"""
 from __future__ import annotations
 
 import re
 from pathlib import PurePosixPath
-from typing import Any
+from typing import Any, Callable
 
 from busybee_cpu.rows import row_goal
 
 
 PATH_RE = r"(?:[A-Za-z]:/)?(?:[\w.-]+[\\/])+[\w.-]+"
+
+# ---------------------------------------------------------------------------
+# text extraction helpers
+# ---------------------------------------------------------------------------
 
 
 def state_text(state: dict[str, Any]) -> str:
@@ -25,7 +36,11 @@ def candidate_paths(state: dict[str, Any]) -> list[str]:
 
 
 def candidate_command(state: dict[str, Any]) -> str:
-    return str(state_features(state).get("candidate_test_command") or state_features(state).get("candidate_command") or "").strip()
+    return str(
+        state_features(state).get("candidate_test_command")
+        or state_features(state).get("candidate_command")
+        or ""
+    ).strip()
 
 
 def first_match(patterns: list[str], text: str, *, strip_terminal: bool = True) -> str | None:
@@ -35,6 +50,11 @@ def first_match(patterns: list[str], text: str, *, strip_terminal: bool = True) 
             value = match.group(1).strip()
             return value.rstrip(".,;") if strip_terminal else value
     return None
+
+
+# ---------------------------------------------------------------------------
+# path utilities
+# ---------------------------------------------------------------------------
 
 
 def path_parent(path: str) -> str:
@@ -140,58 +160,199 @@ def extract_memory_value(state: dict[str, Any]) -> str | None:
     return first_match([r"Endpoint chosen: (https?://[^\s]+)", r"Remember value: ([^\n]+)"], text, strip_terminal=False)
 
 
-def resolve_action_args(action: dict[str, Any], row_or_state: dict[str, Any], *, goal: str | None = None) -> dict[str, Any]:
+# ---------------------------------------------------------------------------
+# resolver registry
+# ---------------------------------------------------------------------------
+
+_RESOLVERS: dict[str, Callable[[dict[str, Any], dict[str, Any], str], dict[str, Any] | None]] = {}
+
+
+def register_resolver(*tools: str) -> Callable:
+    """Decorator: register a resolver function for one or more tool names."""
+
+    def decorator(fn: Callable) -> Callable:
+        for tool in tools:
+            _RESOLVERS[tool] = fn
+        return fn
+
+    return decorator
+
+
+def _extract_state(row_or_state: dict[str, Any]) -> dict[str, Any]:
+    state = row_or_state.get("state")
+    if isinstance(state, dict):
+        return state
+    return row_or_state if isinstance(row_or_state, dict) else {}
+
+
+# ---------------------------------------------------------------------------
+# registered resolvers
+# ---------------------------------------------------------------------------
+
+
+@register_resolver("read_file", "git_diff")
+def _resolve_path_action(args: dict[str, Any], state: dict[str, Any], goal: str) -> dict[str, Any] | None:
+    path = best_path(state, goal=goal, action=args.get("_selected", "read_file"))
+    if path:
+        args["path"] = path
+        return args
+    return None
+
+
+@register_resolver("list_files")
+def _resolve_list_files(args: dict[str, Any], state: dict[str, Any], goal: str) -> dict[str, Any] | None:
+    parent_hint = first_match([rf"Closest known parent should be ({PATH_RE}|[\w./\\-]+)"], state_text(state))
+    if parent_hint:
+        args["path"] = parent_hint
+        args.setdefault("pattern", "")
+        return args
+    path = best_path(state, goal=goal, action="list_files")
+    if path:
+        args["path"] = path_parent(path)
+        args.setdefault("pattern", "")
+        return args
+    return None
+
+
+@register_resolver("run_tests", "run_shell", "shell")
+def _resolve_command_action(args: dict[str, Any], state: dict[str, Any], goal: str) -> dict[str, Any] | None:
+    selected = args.get("_selected", "")
+    command = extract_command(state, selected)
+    if command:
+        args["command"] = command
+        return args
+    return None
+
+
+@register_resolver("remember", "memory_write")
+def _resolve_memory_write(args: dict[str, Any], state: dict[str, Any], goal: str) -> dict[str, Any] | None:
+    value = extract_memory_value(state)
+    if value:
+        args.setdefault("key", "endpoint")
+        args["value"] = value
+        return args
+    path = best_path(state, goal=goal, action="remember")
+    if path:
+        args.setdefault("key", "selected_path")
+        args["value"] = path
+        return args
+    return None
+
+
+@register_resolver("message_send")
+def _resolve_message_send(args: dict[str, Any], state: dict[str, Any], goal: str) -> dict[str, Any] | None:
+    target, message = extract_message_fields(state)
+    resolved = False
+    if target:
+        args["target"] = target
+        resolved = True
+    if message:
+        args["message"] = message
+        resolved = True
+    return args if resolved else None
+
+
+@register_resolver("cron_create", "cron_update")
+def _resolve_schedule_action(args: dict[str, Any], state: dict[str, Any], goal: str) -> dict[str, Any] | None:
+    fields = extract_schedule_fields(state)
+    if fields:
+        args.update(fields)
+        return args
+    return None
+
+
+@register_resolver("apply_patch")
+def _resolve_apply_patch(args: dict[str, Any], state: dict[str, Any], goal: str) -> dict[str, Any] | None:
+    path = best_path(state, goal=goal, action="apply_patch")
+    patch = str(args.get("patch") or "")
+    if path and patch:
+        args["patch"] = re.sub(r"(\*\*\* Update File: ).+", lambda match: f"{match.group(1)}{path}", patch)
+        return args
+    return None
+
+
+@register_resolver("browser_navigate", "browser_click", "browser_export")
+def _resolve_browser_action(args: dict[str, Any], state: dict[str, Any], goal: str) -> dict[str, Any] | None:
+    """Resolve browser action arguments from state.
+
+    Extracts URL, selector, and export format from observations and policy
+    features to populate browser automation tool arguments.
+    """
+    from busybee_cpu.browser_export import parse_export_spec
+
+    spec = parse_export_spec(state)
+    if not spec:
+        return None
+
+    selected = args.get("_selected", "browser_navigate")
+    resolved = False
+
+    if selected == "browser_navigate":
+        url = spec.url or spec.export_page_url or spec.login_url
+        if url:
+            args["url"] = url
+            resolved = True
+    elif selected == "browser_click":
+        if spec.export_button_selector:
+            args["selector"] = spec.export_button_selector
+            resolved = True
+    elif selected == "browser_export":
+        args["spec"] = spec.to_dict()
+        resolved = True
+
+    return args if resolved else None
+
+
+# ---------------------------------------------------------------------------
+# public dispatch
+# ---------------------------------------------------------------------------
+
+
+def resolve_action_args(
+    action: dict[str, Any],
+    row_or_state: dict[str, Any],
+    *,
+    goal: str | None = None,
+) -> dict[str, Any]:
+    """Resolve action arguments using state-based extraction.
+
+    Applies the appropriate resolver for the selected tool to fill concrete
+    values from the provided state. Falls back to template defaults for
+    unresolvable fields and tracks which fields remain unresolved.
+
+    Args:
+        action: Action dict with "tool" and "args" fields
+        row_or_state: Full row dict or state dict containing context
+        goal: Optional goal text for context-aware resolution
+
+    Returns:
+        Modified action dict with resolved arguments and optional
+        "unresolved_fields" list indicating which args couldn't be filled
+    """
     if not isinstance(action, dict):
         return action
-    state = row_or_state.get("state") if isinstance(row_or_state.get("state"), dict) else row_or_state
+    state = _extract_state(row_or_state)
     if not isinstance(state, dict):
         return action
+
     resolved = dict(action)
     args = dict(resolved.get("args") or {})
     selected = str(resolved.get("tool") or resolved.get("action") or "")
     goal_text = goal if goal is not None else row_goal(row_or_state)
 
-    if selected in {"read_file", "git_diff"}:
-        path = best_path(state, goal=goal_text, action=selected)
-        if path:
-            args["path"] = path
-    elif selected == "list_files":
-        parent_hint = first_match([rf"Closest known parent should be ({PATH_RE}|[\w./\\-]+)"], state_text(state))
-        if parent_hint:
-            args["path"] = parent_hint
-            args.setdefault("pattern", "")
-        else:
-            path = best_path(state, goal=goal_text, action=selected)
-            if path:
-                args["path"] = path_parent(path)
-                args.setdefault("pattern", "")
-    elif selected in {"run_tests", "run_shell", "shell"}:
-        command = extract_command(state, selected)
-        if command:
-            args["command"] = command
-    elif selected in {"remember", "memory_write"}:
-        value = extract_memory_value(state)
-        if value:
-            args.setdefault("key", "endpoint")
-            args["value"] = value
-        else:
-            path = best_path(state, goal=goal_text, action=selected)
-            if path:
-                args.setdefault("key", "selected_path")
-                args["value"] = path
-    elif selected == "message_send":
-        target, message = extract_message_fields(state)
-        if target:
-            args["target"] = target
-        if message:
-            args["message"] = message
-    elif selected in {"cron_create", "cron_update"}:
-        args.update(extract_schedule_fields(state))
-    elif selected == "apply_patch":
-        path = best_path(state, goal=goal_text, action=selected)
-        patch = str(args.get("patch") or "")
-        if path and patch:
-            args["patch"] = re.sub(r"(\*\*\* Update File: ).+", lambda match: f"{match.group(1)}{path}", patch)
+    resolver = _RESOLVERS.get(selected)
+    unresolved: list[str] = []
+
+    if resolver:
+        args["_selected"] = selected
+        result = resolver(args, state, goal_text)
+        args.pop("_selected", None)
+        if result is None:
+            unresolved = [key for key, value in args.items() if isinstance(value, str) and ("<" in value and ">" in value)]
+    else:
+        unresolved = [key for key, value in args.items() if isinstance(value, str) and ("<" in value and ">" in value)]
 
     resolved["args"] = args
+    if unresolved:
+        resolved["unresolved_fields"] = unresolved
     return resolved

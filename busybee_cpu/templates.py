@@ -1,4 +1,4 @@
-from __future__ import annotations
+"""Default argument templates and template inference logic."""
 
 from typing import Any
 
@@ -29,6 +29,10 @@ DEFAULT_ARGS: dict[str, dict[str, Any]] = {
     },
     "clarify": {"question": "Which generated output directory should be deleted?"},
     "escalate": {"reason": "Destructive command requires explicit approval and sandbox confirmation."},
+    "browser_navigate": {"url": "<URL_FROM_STATE>"},
+    "browser_click": {"selector": "<SELECTOR_FROM_STATE>"},
+    "browser_type": {"selector": "<SELECTOR_FROM_STATE>", "text": "<TEXT_FROM_STATE>"},
+    "browser_export": {"spec": {}},
 }
 
 
@@ -56,4 +60,12 @@ def infer_arg_template(action: dict[str, Any]) -> str:
         return "clarify_question"
     if selected == "escalate" and keys == {"reason"}:
         return "escalate_reason"
+    if selected == "browser_navigate" and keys == {"url"}:
+        return "url_from_state"
+    if selected == "browser_click" and keys == {"selector"}:
+        return "selector_from_state"
+    if selected == "browser_type" and keys == {"selector", "text"}:
+        return "selector_text_from_state"
+    if selected == "browser_export" and keys == {"spec"}:
+        return "export_spec_from_state"
     return "default_args"

@@ -1,4 +1,4 @@
-from __future__ import annotations
+"""Row extraction and feature text generation utilities."""
 
 import json
 import re

@@ -397,8 +397,19 @@ index 0e76ba2..125ff86 100644
 +                final_response = "BusyBeaver adapter batched the independent subtasks and merged the deterministic summary."
 +
 +            elif "browser" in toolsets:
-+                partial = True
-+                final_response = "BusyBeaver adapter declined browser automation; this remains full-controller work."
++                # HA-08 partial offload: extract structured export spec from state
++                # and hand browser execution to Hermes controller.
++                from busybee_cpu.browser_export import parse_export_spec, ExportSpec
++                state = {"recent_observations": [prompt], "policy_features": {}}
++                spec = parse_export_spec(state)
++                if spec:
++                    export_args = {"action": "export", "spec": spec.to_dict()}
++                    _execute_event("browser_export", export_args, {"spec": spec.to_dict()})
++                    partial = True
++                    final_response = "BusyBeaver adapter generated structured browser export spec; Hermes controller executes login/navigation/DOM interaction."
++                else:
++                    partial = True
++                    final_response = "BusyBeaver adapter could not extract export spec; browser automation remains full-controller work."
 +
 +            elif "cronjob" in toolsets and re.search(r"\bevery morning\b|\b8am\b|\b8\s*am\b", prompt, flags=re.IGNORECASE):
                  health_match = re.search(r"http://127\.0\.0\.1:\d+/health", prompt)
