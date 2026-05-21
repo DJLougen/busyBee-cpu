@@ -15,6 +15,7 @@ reports/*
 !reports/hermes_full20_busybee_cpu_*.log
 !reports/hermes_integration_report.md
 !reports/hermes_replacement_scope.md
+!reports/stress_test_results.json
 *.joblib
 *.pkl
 .DS_Store

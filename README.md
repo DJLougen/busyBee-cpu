@@ -1,6 +1,6 @@
 # busyBee-cpu
 
-**v0.2.0** -- CPU-friendly, non-generative ML policy layer for structured agent/tool workflows.
+**v0.3.0** -- CPU-friendly, non-generative ML policy layer for structured agent/tool workflows.
 
 `busyBee-cpu` trains small supervised classifiers that answer two questions:
 
@@ -31,6 +31,29 @@ bee-serve --model runs/policy.joblib --host 127.0.0.1 --port 8767
 # Benchmark
 python scripts/benchmark.py
 ```
+
+## Setup with Hermes
+
+Three commands to go from clone to running against HermesAgent-20:
+
+```bash
+# 1. Install and verify
+pip install -e ".[dev]" && python -m pytest
+
+# 2. Train and serve
+bee-train --train examples/train.jsonl --eval examples/eval.jsonl --model-out runs/policy.joblib
+bee-serve --model runs/policy.joblib --host 0.0.0.0 --port 8767 --exposed-model busybee-cpu
+
+# 3. Patch HermesAgent-20 and run
+cd /path/to/HermesAgent-20
+git apply /path/to/busyBee-cpu/integrations/hermesagent20/busybee-cpu-adapter.patch
+npm install && npm run build:benchlocal
+npm run dev:run -- --all --provider busybee-cpu --model busybee-cpu \
+  --provider-model busybee-cpu --label busyBee-cpu \
+  --base-url http://127.0.0.1:8767/v1 --auth-mode none --json --build-image
+```
+
+For Docker, Windows, troubleshooting, and the direct adapter stress test, see [docs/HERMES_HARNESS_SETUP.md](docs/HERMES_HARNESS_SETUP.md).
 
 ## HermesAgent-20 Result
 
@@ -243,7 +266,8 @@ examples/
   train.jsonl          Training examples
   eval.jsonl           Evaluation examples
 tests/
-  test_policy.py       41 tests covering all modules
+  test_policy.py       41 tests covering policy, resolvers, workflow, tracing
+  test_browser_export.py  53 tests covering HA-08 browser export
 integrations/
   hermesagent20/       Hermes adapter patch
 docs/

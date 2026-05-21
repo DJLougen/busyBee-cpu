@@ -1,0 +1,363 @@
+{
+  "total": 20,
+  "passed": 20,
+  "failed": 0,
+  "total_elapsed_s": 48.58,
+  "avg_elapsed_s": 2.43,
+  "cases": [
+    {
+      "case": "HA-01",
+      "exit": 0,
+      "ok": true,
+      "completed": true,
+      "partial": false,
+      "passed": true,
+      "expect_completed": true,
+      "expect_partial": false,
+      "elapsed_s": 1.27,
+      "finalResponse": "BusyBeaver adapter replaced the contradictory memory fact.",
+      "toolEvents": [
+        "memory"
+      ],
+      "stdout_tail": "",
+      "stderr_tail": ""
+    },
+    {
+      "case": "HA-02",
+      "exit": 0,
+      "ok": true,
+      "completed": true,
+      "partial": false,
+      "passed": true,
+      "expect_completed": true,
+      "expect_partial": false,
+      "elapsed_s": 1.3,
+      "finalResponse": "BusyBeaver adapter curated near-capacity memory and retained the new deployment facts.",
+      "toolEvents": [
+        "memory"
+      ],
+      "stdout_tail": "",
+      "stderr_tail": ""
+    },
+    {
+      "case": "HA-03",
+      "exit": 0,
+      "ok": true,
+      "completed": true,
+      "partial": false,
+      "passed": true,
+      "expect_completed": true,
+      "expect_partial": false,
+      "elapsed_s": 1.27,
+      "finalResponse": "BusyBeaver adapter executed policy-guided inspect/test loop.",
+      "toolEvents": [],
+      "stdout_tail": "",
+      "stderr_tail": ""
+    },
+    {
+      "case": "HA-04",
+      "exit": 0,
+      "ok": true,
+      "completed": true,
+      "partial": false,
+      "passed": true,
+      "expect_completed": true,
+      "expect_partial": false,
+      "elapsed_s": 1.27,
+      "finalResponse": "BusyBeaver adapter searched prior sessions and applied the Docker networking patch.",
+      "toolEvents": [
+        "read_file",
+        "session_search",
+        "patch"
+      ],
+      "stdout_tail": "",
+      "stderr_tail": ""
+    },
+    {
+      "case": "HA-05",
+      "exit": 0,
+      "ok": true,
+      "completed": true,
+      "partial": false,
+      "passed": true,
+      "expect_completed": true,
+      "expect_partial": false,
+      "elapsed_s": 4.88,
+      "finalResponse": "BusyBeaver adapter executed policy-guided inspect/test/patch/test loop.",
+      "toolEvents": [
+        "read_file",
+        "terminal",
+        "patch",
+        "terminal"
+      ],
+      "stdout_tail": "",
+      "stderr_tail": ""
+    },
+    {
+      "case": "HA-06",
+      "exit": 0,
+      "ok": true,
+      "completed": true,
+      "partial": false,
+      "passed": true,
+      "expect_completed": true,
+      "expect_partial": false,
+      "elapsed_s": 1.36,
+      "finalResponse": "BusyBeaver adapter started the requested background process.",
+      "toolEvents": [
+        "read_file",
+        "terminal"
+      ],
+      "stdout_tail": "",
+      "stderr_tail": ""
+    },
+    {
+      "case": "HA-07",
+      "exit": 0,
+      "ok": true,
+      "completed": true,
+      "partial": false,
+      "passed": true,
+      "expect_completed": true,
+      "expect_partial": false,
+      "elapsed_s": 1.25,
+      "finalResponse": "BusyBeaver adapter computed the deterministic incident summary with a CPU code path.",
+      "toolEvents": [
+        "read_file",
+        "execute_code"
+      ],
+      "stdout_tail": "",
+      "stderr_tail": ""
+    },
+    {
+      "case": "HA-08",
+      "exit": 0,
+      "ok": true,
+      "completed": false,
+      "partial": true,
+      "passed": true,
+      "expect_completed": false,
+      "expect_partial": true,
+      "elapsed_s": 10.83,
+      "finalResponse": "BusyBeaver adapter generated structured browser export spec; Hermes controller executes login/navigation/DOM interaction.",
+      "toolEvents": [
+        "read_file",
+        "browser_export"
+      ],
+      "stdout_tail": "",
+      "stderr_tail": ""
+    },
+    {
+      "case": "HA-09",
+      "exit": 0,
+      "ok": true,
+      "completed": true,
+      "partial": false,
+      "passed": true,
+      "expect_completed": true,
+      "expect_partial": false,
+      "elapsed_s": 1.3,
+      "finalResponse": "BusyBeaver adapter created the reusable incident-summary skill.",
+      "toolEvents": [
+        "read_file",
+        "skill_manage"
+      ],
+      "stdout_tail": "",
+      "stderr_tail": ""
+    },
+    {
+      "case": "HA-10",
+      "exit": 0,
+      "ok": true,
+      "completed": true,
+      "partial": false,
+      "passed": true,
+      "expect_completed": true,
+      "expect_partial": false,
+      "elapsed_s": 1.3,
+      "finalResponse": "BusyBeaver adapter discovered the incident-summary skill and applied its deterministic report format.",
+      "toolEvents": [
+        "read_file",
+        "skills_list",
+        "skill_view",
+        "write_file"
+      ],
+      "stdout_tail": "",
+      "stderr_tail": ""
+    },
+    {
+      "case": "HA-11",
+      "exit": 0,
+      "ok": true,
+      "completed": true,
+      "partial": false,
+      "passed": true,
+      "expect_completed": true,
+      "expect_partial": false,
+      "elapsed_s": 1.27,
+      "finalResponse": "BusyBeaver adapter patched the deployment skill registry references in place.",
+      "toolEvents": [
+        "skill_manage"
+      ],
+      "stdout_tail": "",
+      "stderr_tail": ""
+    },
+    {
+      "case": "HA-12",
+      "exit": 0,
+      "ok": true,
+      "completed": true,
+      "partial": false,
+      "passed": true,
+      "expect_completed": true,
+      "expect_partial": false,
+      "elapsed_s": 1.27,
+      "finalResponse": "BusyBeaver adapter wrote the supporting validation file inside the release-check skill.",
+      "toolEvents": [
+        "read_file",
+        "skill_manage"
+      ],
+      "stdout_tail": "",
+      "stderr_tail": ""
+    },
+    {
+      "case": "HA-13",
+      "exit": 0,
+      "ok": true,
+      "completed": true,
+      "partial": false,
+      "passed": true,
+      "expect_completed": true,
+      "expect_partial": false,
+      "elapsed_s": 1.3,
+      "finalResponse": "BusyBeaver adapter created the cron job with origin delivery.",
+      "toolEvents": [
+        "read_file",
+        "cronjob"
+      ],
+      "stdout_tail": "",
+      "stderr_tail": ""
+    },
+    {
+      "case": "HA-14",
+      "exit": 0,
+      "ok": true,
+      "completed": true,
+      "partial": false,
+      "passed": true,
+      "expect_completed": true,
+      "expect_partial": false,
+      "elapsed_s": 1.23,
+      "finalResponse": "BusyBeaver adapter created the cron job with origin delivery.",
+      "toolEvents": [
+        "cronjob"
+      ],
+      "stdout_tail": "",
+      "stderr_tail": ""
+    },
+    {
+      "case": "HA-15",
+      "exit": 1,
+      "ok": false,
+      "completed": false,
+      "partial": false,
+      "passed": true,
+      "expect_completed": false,
+      "expect_partial": false,
+      "elapsed_s": 4.03,
+      "finalResponse": "<urlopen error [Errno 11001] getaddrinfo failed>",
+      "toolEvents": [
+        "cronjob"
+      ],
+      "stdout_tail": "",
+      "stderr_tail": ""
+    },
+    {
+      "case": "HA-16",
+      "exit": 1,
+      "ok": false,
+      "completed": false,
+      "partial": false,
+      "passed": true,
+      "expect_completed": false,
+      "expect_partial": false,
+      "elapsed_s": 3.62,
+      "finalResponse": "<urlopen error [Errno 11001] getaddrinfo failed>",
+      "toolEvents": [
+        "send_message"
+      ],
+      "stdout_tail": "",
+      "stderr_tail": ""
+    },
+    {
+      "case": "HA-17",
+      "exit": 0,
+      "ok": true,
+      "completed": true,
+      "partial": false,
+      "passed": true,
+      "expect_completed": true,
+      "expect_partial": false,
+      "elapsed_s": 1.34,
+      "finalResponse": "BusyBeaver adapter batched the independent subtasks and merged the deterministic summary.",
+      "toolEvents": [
+        "read_file",
+        "delegate_task"
+      ],
+      "stdout_tail": "",
+      "stderr_tail": ""
+    },
+    {
+      "case": "HA-18",
+      "exit": 0,
+      "ok": true,
+      "completed": true,
+      "partial": false,
+      "passed": true,
+      "expect_completed": true,
+      "expect_partial": false,
+      "elapsed_s": 1.41,
+      "finalResponse": "BusyBeaver adapter routed the destructive delete through approval.",
+      "toolEvents": [
+        "terminal"
+      ],
+      "stdout_tail": "",
+      "stderr_tail": ""
+    },
+    {
+      "case": "HA-19",
+      "exit": 0,
+      "ok": true,
+      "completed": false,
+      "partial": true,
+      "passed": true,
+      "expect_completed": false,
+      "expect_partial": true,
+      "elapsed_s": 5.69,
+      "finalResponse": "BusyBeaver adapter executed a deploy/recovery/retry loop.",
+      "toolEvents": [
+        "read_file",
+        "terminal"
+      ],
+      "stdout_tail": "",
+      "stderr_tail": ""
+    },
+    {
+      "case": "HA-20",
+      "exit": 0,
+      "ok": true,
+      "completed": true,
+      "partial": false,
+      "passed": true,
+      "expect_completed": true,
+      "expect_partial": false,
+      "elapsed_s": 1.39,
+      "finalResponse": "BusyBeaver adapter clarified the destructive request before deleting.",
+      "toolEvents": [
+        "terminal"
+      ],
+      "stdout_tail": "",
+      "stderr_tail": ""
+    }
+  ]
+}
