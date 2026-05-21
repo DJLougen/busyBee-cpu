@@ -312,6 +312,13 @@ def main() -> None:
 
     default_name = args.exposed_model or next(iter(policies))
 
+    # If --exposed-model is provided and doesn't match any key,
+    # rename the first policy to match so lookups by exposed name work.
+    if args.exposed_model and args.exposed_model not in policies and len(policies) == 1:
+        old_key = next(iter(policies))
+        policies[args.exposed_model] = policies.pop(old_key)
+        log.info("Renamed model key %r -> %r for exposed name", old_key, args.exposed_model)
+
     server = PolicyServer((args.host, args.port), Handler)
     server.policies = policies
     server.default_model = default_name

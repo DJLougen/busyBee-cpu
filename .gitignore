@@ -23,6 +23,7 @@ reports/*
 !reports/swebench_policy.md
 !reports/stress_test_swebench.json
 !reports/honest_evaluation.md
+!docs/hermes-agent.md
 !reports/cross_evaluation_matrix.json
 !examples/eval_swebench_heldout.jsonl
 *.joblib

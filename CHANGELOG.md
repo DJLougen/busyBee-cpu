@@ -5,6 +5,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.6.0] - 2026-05-21
+
+### Added
+
+- **hermes-agent.md**: New documentation explaining the agent integration architecture — how the policy offloads mechanical routing decisions from the LLM
+- **Held-out SWE-bench eval**: 11,881 rows from SWE-bench train[5000:10000] that were never in any training set
+- **Cross-evaluation matrix**: All 3 models evaluated on data they never trained on (no contaminated results)
+
+### Changed
+
+- **README rewrite**: Reframed around routing offload — the policy handles mechanical decisions (read file, run tests, escalate) so the LLM only fires for actual reasoning
+- **Honest evaluation report**: Rewritten to match the offload framing. Key result: combined model (819 examples) achieves 96.4% on 11,881 unseen SWE-bench examples
+- **Server fix**: `--exposed-model` now correctly renames the policy key so Hermes adapter lookups by exposed name work
+- **Version**: Bumped to 0.6.0
+
+### Removed
+
+- Contaminated benchmark claims (99.96% SWE-bench eval, 100% synthetic eval) — these were evaluated on training data
+- HF model comparison table (compared busyBee-cpu to LLMs at different tasks)
+
 ## [0.5.0] - 2026-05-21
 
 ### Added
@@ -132,5 +152,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **HermesAgent-20**: 19/20 scenarios passing after expansion
 - **BusyBeaver evals**: 1.0000 correct tool, 1.0000 argument semantic match
 
+[0.6.0]: https://github.com/DJLougen/busyBee-cpu/compare/v0.5.0...v0.6.0
+[0.5.0]: https://github.com/DJLougen/busyBee-cpu/compare/v0.4.0...v0.5.0
+[0.4.0]: https://github.com/DJLougen/busyBee-cpu/compare/v0.3.0...v0.4.0
+[0.3.0]: https://github.com/DJLougen/busyBee-cpu/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/DJLougen/busyBee-cpu/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/DJLougen/busyBee-cpu/releases/tag/v0.1.0
