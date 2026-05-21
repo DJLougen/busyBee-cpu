@@ -143,6 +143,8 @@ The **SWE-bench model** (19 original + 14,699 from real GitHub issues) achieves 
 
 See [reports/swebench_benchmark_comparison.md](reports/swebench_benchmark_comparison.md) for full SWE-bench analysis and [reports/benchmark_comparison.md](reports/benchmark_comparison.md) for BFCL/synthetic analysis.
 
+**Important**: See [reports/honest_evaluation.md](reports/honest_evaluation.md) for clean evaluation on data the models were NOT trained on. No contaminated results.
+
 ## Architecture
 
 ```text

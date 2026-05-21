@@ -22,6 +22,9 @@ reports/*
 !reports/swebench_benchmark_comparison.md
 !reports/swebench_policy.md
 !reports/stress_test_swebench.json
+!reports/honest_evaluation.md
+!reports/cross_evaluation_matrix.json
+!examples/eval_swebench_heldout.jsonl
 *.joblib
 *.pkl
 .DS_Store

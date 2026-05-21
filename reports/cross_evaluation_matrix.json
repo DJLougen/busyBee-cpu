@@ -1,0 +1,68 @@
+{
+  "original": {
+    "original_10": {
+      "accuracy": 0.8,
+      "arg_semantic": 0.6,
+      "contaminated": "False"
+    },
+    "synthetic_200": {
+      "accuracy": 0.59,
+      "arg_semantic": 0.56,
+      "contaminated": "False"
+    },
+    "bfcl_555": {
+      "accuracy": 0.4072072072072072,
+      "arg_semantic": 0.014414414414414415,
+      "contaminated": "False"
+    },
+    "swebench_2405": {
+      "accuracy": 0.9031185031185032,
+      "arg_semantic": 0.6024948024948025,
+      "contaminated": "False"
+    }
+  },
+  "combined": {
+    "original_10": {
+      "accuracy": 0.9,
+      "arg_semantic": 0.6,
+      "contaminated": "False"
+    },
+    "synthetic_200": {
+      "accuracy": 1.0,
+      "arg_semantic": 0.56,
+      "contaminated": "True"
+    },
+    "bfcl_555": {
+      "accuracy": 0.4072072072072072,
+      "arg_semantic": 0.014414414414414415,
+      "contaminated": "False"
+    },
+    "swebench_2405": {
+      "accuracy": 0.9833679833679834,
+      "arg_semantic": 0.6024948024948025,
+      "contaminated": "False"
+    }
+  },
+  "swebench": {
+    "original_10": {
+      "accuracy": 0.8,
+      "arg_semantic": 0.6,
+      "contaminated": "False"
+    },
+    "synthetic_200": {
+      "accuracy": 0.7,
+      "arg_semantic": 0.56,
+      "contaminated": "False"
+    },
+    "bfcl_555": {
+      "accuracy": 0.4072072072072072,
+      "arg_semantic": 0.014414414414414415,
+      "contaminated": "False"
+    },
+    "swebench_2405": {
+      "accuracy": 0.9995841995841996,
+      "arg_semantic": 0.6029106029106029,
+      "contaminated": "partial"
+    }
+  }
+}
