@@ -15,6 +15,7 @@ from typing import Any
 from pathlib import Path
 
 from busybee_cpu.policy import CpuActionPolicy
+from busybee_cpu.rows import tool_names as _tool_names
 from busybee_cpu.tracing import create_tracer
 from busybee_cpu.workflow import WorkflowTracker
 
@@ -223,8 +224,6 @@ class Handler(BaseHTTPRequestHandler):
         )
 
         # workflow suggestion
-        from busybee_cpu.rows import tool_names as _tool_names
-
         avail = set(_tool_names(row))
         suggestion = self.server.workflow.suggest(
             str(action.get("tool") or ""),

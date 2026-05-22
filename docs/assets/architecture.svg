@@ -1,0 +1,96 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="420" viewBox="0 0 880 420" role="img" aria-labelledby="title desc">
+  <title id="title">busyBee-cpu routing offload architecture</title>
+  <desc id="desc">Agent loop with busyBee-cpu policy offloading mechanical routing decisions from the LLM.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#0f172a"/><stop offset="100%" stop-color="#0c1222"/></linearGradient>
+    <linearGradient id="green" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#22c55e"/><stop offset="100%" stop-color="#16a34a"/></linearGradient>
+    <linearGradient id="blue" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#2563eb"/></linearGradient>
+    <linearGradient id="amber" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#f59e0b"/><stop offset="100%" stop-color="#d97706"/></linearGradient>
+    <filter id="glow"><feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="880" height="420" fill="url(#bg)"/>
+  <rect x="20" y="20" width="840" height="380" rx="16" fill="#111827" stroke="#1e293b" stroke-width="1.5"/>
+
+  <!-- Title -->
+  <text x="48" y="58" font-family="Inter, system-ui, sans-serif" font-size="20" font-weight="800" fill="#f8fafc">How busyBee-cpu Offloads Routing from the LLM</text>
+  <text x="48" y="80" font-family="Inter, system-ui, sans-serif" font-size="12" fill="#64748b">The policy handles mechanical decisions. The LLM only fires for reasoning.</text>
+
+  <!-- Agent Loop Box -->
+  <rect x="48" y="100" width="140" height="260" rx="12" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+  <text x="118" y="126" font-family="Inter, system-ui, sans-serif" font-size="13" font-weight="700" fill="#e2e8f0" text-anchor="middle">Agent Loop</text>
+
+  <rect x="62" y="140" width="112" height="32" rx="6" fill="#1e293b"/>
+  <text x="118" y="161" font-family="Inter, system-ui, sans-serif" font-size="11" fill="#94a3b8" text-anchor="middle">Build state</text>
+
+  <rect x="62" y="184" width="112" height="32" rx="6" fill="#1e293b"/>
+  <text x="118" y="205" font-family="Inter, system-ui, sans-serif" font-size="11" fill="#94a3b8" text-anchor="middle">Observe result</text>
+
+  <rect x="62" y="228" width="112" height="32" rx="6" fill="#1e293b"/>
+  <text x="118" y="249" font-family="Inter, system-ui, sans-serif" font-size="11" fill="#94a3b8" text-anchor="middle">Update context</text>
+
+  <rect x="62" y="272" width="112" height="32" rx="6" fill="#1e293b"/>
+  <text x="118" y="293" font-family="Inter, system-ui, sans-serif" font-size="11" fill="#94a3b8" text-anchor="middle">Next turn</text>
+
+  <!-- Arrow: state -> policy -->
+  <line x1="188" y1="156" x2="240" y2="210" stroke="#475569" stroke-width="2" marker-end="url(#arrowGray)"/>
+  <defs><marker id="arrowGray" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#475569"/></marker></defs>
+
+  <!-- busyBee-cpu Box -->
+  <rect x="240" y="140" width="260" height="220" rx="12" fill="#0f172a" stroke="url(#green)" stroke-width="2" filter="url(#glow)"/>
+  <text x="370" y="166" font-family="Inter, system-ui, sans-serif" font-size="14" font-weight="800" fill="#22c55e" text-anchor="middle">busyBee-cpu</text>
+  <text x="370" y="182" font-family="Inter, system-ui, sans-serif" font-size="10" fill="#4ade80" text-anchor="middle">~30ms per prediction · CPU only · no LLM call</text>
+
+  <!-- Classifier -->
+  <rect x="258" y="196" width="224" height="36" rx="8" fill="#1e293b" stroke="#334155"/>
+  <text x="370" y="210" font-family="Inter, system-ui, sans-serif" font-size="11" font-weight="600" fill="#e2e8f0" text-anchor="middle">TF-IDF + VotingClassifier</text>
+  <text x="370" y="224" font-family="Inter, system-ui, sans-serif" font-size="9" fill="#64748b" text-anchor="middle">SGD + Naive Bayes + LogisticRegression</text>
+
+  <!-- Action outputs -->
+  <rect x="258" y="244" width="106" height="28" rx="6" fill="#14532d" stroke="#22c55e" stroke-width="1"/>
+  <text x="311" y="263" font-family="Inter, system-ui, sans-serif" font-size="10" font-weight="700" fill="#86efac" text-anchor="middle">read_file</text>
+
+  <rect x="376" y="244" width="106" height="28" rx="6" fill="#14532d" stroke="#22c55e" stroke-width="1"/>
+  <text x="429" y="263" font-family="Inter, system-ui, sans-serif" font-size="10" font-weight="700" fill="#86efac" text-anchor="middle">run_tests</text>
+
+  <rect x="258" y="282" width="106" height="28" rx="6" fill="#14532d" stroke="#22c55e" stroke-width="1"/>
+  <text x="311" y="301" font-family="Inter, system-ui, sans-serif" font-size="10" font-weight="700" fill="#86efac" text-anchor="middle">apply_patch</text>
+
+  <rect x="376" y="282" width="106" height="28" rx="6" fill="#422006" stroke="#f59e0b" stroke-width="1"/>
+  <text x="429" y="301" font-family="Inter, system-ui, sans-serif" font-size="10" font-weight="700" fill="#fbbf24" text-anchor="middle">escalate</text>
+
+  <!-- Resolver -->
+  <rect x="258" y="320" width="224" height="28" rx="6" fill="#1e293b" stroke="#334155"/>
+  <text x="370" y="339" font-family="Inter, system-ui, sans-serif" font-size="10" fill="#94a3b8" text-anchor="middle">Deterministic resolver fills arguments from state</text>
+
+  <!-- Arrow: read/test/patch back to agent loop -->
+  <path d="M258,258 L210,258 L210,196 L188,196" stroke="#22c55e" stroke-width="2" fill="none" marker-end="url(#arrowGreen)"/>
+  <defs><marker id="arrowGreen" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#22c55e"/></marker></defs>
+  <text x="202" y="240" font-family="Inter, system-ui, sans-serif" font-size="9" font-weight="600" fill="#22c55e" text-anchor="end" transform="rotate(-90 202 240)">execute</text>
+
+  <!-- Arrow: escalate -> LLM -->
+  <line x1="500" y1="296" x2="560" y2="240" stroke="#f59e0b" stroke-width="2" marker-end="url(#arrowAmber)"/>
+  <defs><marker id="arrowAmber" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#f59e0b"/></marker></defs>
+
+  <!-- LLM Box -->
+  <rect x="560" y="140" width="260" height="220" rx="12" fill="#0f172a" stroke="#334155" stroke-width="1.5"/>
+  <text x="690" y="166" font-family="Inter, system-ui, sans-serif" font-size="14" font-weight="800" fill="#e2e8f0" text-anchor="middle">LLM</text>
+  <text x="690" y="182" font-family="Inter, system-ui, sans-serif" font-size="10" fill="#64748b" text-anchor="middle">Only fires when policy escalates</text>
+
+  <rect x="578" y="196" width="224" height="32" rx="6" fill="#1e293b"/>
+  <text x="690" y="217" font-family="Inter, system-ui, sans-serif" font-size="11" fill="#94a3b8" text-anchor="middle">Understand the bug</text>
+
+  <rect x="578" y="240" width="224" height="32" rx="6" fill="#1e293b"/>
+  <text x="690" y="261" font-family="Inter, system-ui, sans-serif" font-size="11" fill="#94a3b8" text-anchor="middle">Write the patch content</text>
+
+  <rect x="578" y="284" width="224" height="32" rx="6" fill="#1e293b"/>
+  <text x="690" y="305" font-family="Inter, system-ui, sans-serif" font-size="11" fill="#94a3b8" text-anchor="middle">Plan multi-step strategy</text>
+
+  <rect x="578" y="328" width="224" height="24" rx="6" fill="#1e293b"/>
+  <text x="690" y="345" font-family="Inter, system-ui, sans-serif" font-size="11" fill="#94a3b8" text-anchor="middle">Interpret test output</text>
+
+  <!-- Metrics footer -->
+  <rect x="48" y="374" width="784" height="2" rx="1" fill="#1e293b"/>
+  <text x="48" y="395" font-family="Inter, system-ui, sans-serif" font-size="11" fill="#64748b">96.4% of routing decisions handled without the LLM  ·  20/20 Hermes scenarios pass  ·  819 training examples</text>
+</svg>

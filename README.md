@@ -1,5 +1,13 @@
 # busyBee-cpu
 
+<p align="center">
+  <img src="https://img.shields.io/badge/version-0.6.0-22c55e?style=flat-square" alt="version"/>
+  <img src="https://img.shields.io/badge/routing%20accuracy-96.4%25-22c55e?style=flat-square" alt="accuracy"/>
+  <img src="https://img.shields.io/badge/hermes-20%2F20-3b82f6?style=flat-square" alt="hermes"/>
+  <img src="https://img.shields.io/badge/training-819%20examples-8b5cf6?style=flat-square" alt="training"/>
+  <img src="https://img.shields.io/badge/license-MIT-64748b?style=flat-square" alt="license"/>
+</p>
+
 **v0.6.0** -- CPU routing offload layer for agent harnesses.
 
 ## What It Does
@@ -23,7 +31,9 @@ The policy answers one question: **which of the 4 core actions should run next?*
 
 Deterministic resolvers then fill concrete paths, commands, and arguments from structured state. The learned part stays on CPU, takes ~30ms, and never calls an LLM to generate JSON.
 
-![busyBee-cpu HermesAgent-20 scorecard](docs/assets/hermes-scorecard.svg)
+<p align="center">
+  <img src="docs/assets/architecture.svg" alt="Architecture: how busyBee-cpu offloads routing from the LLM" width="100%"/>
+</p>
 
 ## Quick Start
 
@@ -100,6 +110,10 @@ The policy offloads the routing for **all 20 scenarios**. The full stress test t
 | Cron/schedule/message routing | Complex constraint satisfaction |
 
 ## Evidence
+
+<p align="center">
+  <img src="docs/assets/results.svg" alt="Evaluation results on unseen data" width="100%"/>
+</p>
 
 ### Routing Accuracy on Unseen Data
 
@@ -301,10 +315,7 @@ busybee_cpu/
   browser_export.py    Browser export partial offload (HA-08)
 scripts/
   benchmark.py         Performance benchmarks
-  train_policy.py      Training entry point
-  serve_policy.py      Server entry point
   stress_test_hermes.py  Full 20-scenario Hermes stress test
-  test_hermes_direct.py  Hermes adapter smoke test
 examples/
   train.jsonl          Training examples
   eval.jsonl           Evaluation examples
@@ -316,6 +327,7 @@ integrations/
 docs/
   hermes-agent.md      Agent integration architecture
   HERMES_HARNESS_SETUP.md  Installation guide
+  assets/              Architecture and results diagrams
 ```
 
 ## Dependencies

@@ -12,18 +12,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **hermes-agent.md**: New documentation explaining the agent integration architecture — how the policy offloads mechanical routing decisions from the LLM
 - **Held-out SWE-bench eval**: 11,881 rows from SWE-bench train[5000:10000] that were never in any training set
 - **Cross-evaluation matrix**: All 3 models evaluated on data they never trained on (no contaminated results)
+- **Architecture diagram**: `docs/assets/architecture.svg` showing the policy↔LLM offload flow
+- **Results dashboard**: `docs/assets/results.svg` showing key metrics (96.4%, 20/20, 819 examples)
 
 ### Changed
 
 - **README rewrite**: Reframed around routing offload — the policy handles mechanical decisions (read file, run tests, escalate) so the LLM only fires for actual reasoning
 - **Honest evaluation report**: Rewritten to match the offload framing. Key result: combined model (819 examples) achieves 96.4% on 11,881 unseen SWE-bench examples
 - **Server fix**: `--exposed-model` now correctly renames the policy key so Hermes adapter lookups by exposed name work
-- **Version**: Bumped to 0.6.0
+- **Version sync**: `pyproject.toml` and `__init__.py` now both say 0.6.0 (were 0.3.0 and 0.5.0)
+- **Server perf**: Moved `tool_names` import from hot path to module level
+- **README polish**: Added shields.io badges, architecture and results SVGs
 
 ### Removed
 
 - Contaminated benchmark claims (99.96% SWE-bench eval, 100% synthetic eval) — these were evaluated on training data
 - HF model comparison table (compared busyBee-cpu to LLMs at different tasks)
+- Dead scripts: `train_policy.py`, `serve_policy.py`, `test_hermes_direct.py` (stubs/subsumed by entry points and stress test)
+- 10 stale intermediate reports from `reports/` (superseded by `honest_evaluation.md`)
+- Stale scorecard SVG (replaced by architecture and results diagrams)
+- Empty `configs/` directory
 
 ## [0.5.0] - 2026-05-21
 

@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "busybee-cpu"
-version = "0.3.0"
+version = "0.6.0"
 description = "CPU-friendly supervised action-policy classifier for structured agent/tool workflows."
 readme = "README.md"
 requires-python = ">=3.10"
